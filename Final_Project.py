@@ -9,6 +9,7 @@ pygame.init()
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREY = (200,200,200)
+YELLOW = (225, 225, 0)
 #set up the screen 
 SCREEN_WIDTH = 560
 SCREEN_HEIGHT = 560
@@ -59,6 +60,18 @@ while run:
     for event in pygame.event.get():
         if event.type == QUIT:
             run = False
+        if event.type == MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = event.pos ## get the mouse position
+            ## converts that position to grid coordinates
+            col = mouse_x // tile_size
+            row = mouse_y // tile_size
+            ## check if mouse position within grid 
+            if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS:
+                ## if its within the grid, turn the tile on or off
+                if matrix_grid[row][col] == 0:
+                    matrix_grid[row][col] = 1
+                else: 
+                    matrix_grid[row][col] == 1
     draw_grid(tile_size)
     pygame.display.update()
 pygame.quit()
