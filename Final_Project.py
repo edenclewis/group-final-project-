@@ -9,6 +9,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREY = (200,200,200)
 YELLOW = (225, 225, 0)
+LIGHT_BLUE = (173, 216, 230)
 #set up the screen 
 SCREEN_WIDTH = 560
 SCREEN_HEIGHT = 560
@@ -43,6 +44,8 @@ def draw_grid(tile_size):
                 color = BLACK
             elif matrix_grid[row][col] == 2:
                 color = YELLOW
+            elif matrix_grid[row][col] == 3:
+                color = LIGHT_BLUE
             pygame.draw.rect(SCREEN, color, rect)
             pygame.draw.rect(SCREEN, BLACK, rect, 1)
             
@@ -72,10 +75,17 @@ while run:
                 if matrix_grid[row][col] == 0:
                      ##set color of box equal to yellow color 
                     matrix_grid[row][col] = 2
-                    pygame.draw.rect(SCREEN, YELLOW, (col * tile_size, row * tile_size, tile_size, tile_size))
-                    
+                ## if the tile is yellow, set it back to white
                 elif matrix_grid[row][col] == 2: 
                     matrix_grid[row][col] = 0
+                    ##if the tile is not black, set the columns to the right of the tile to blue 
+                if matrix_grid[row][col] != 1:
+                    next_column = col + 1 ## variable defined as column next to the one that you clicked on 
+                    while next_column < GRID_COLS: ## makes sure that the column next to the one you clicked is within the grid
+                        if matrix_grid[row][next_column] == 1: ## if the column next to the one you clicked is black then get out of while loop
+                            break
+                        matrix_grid[row][next_column] = 3 ## if column is not black, then you set the color of the column next to the one you clicked to blue 
+                        next_column += 1 ## now do the column two away from the one you clicked and so on until you reach the end of the word/grid 
                     
     draw_grid(tile_size)
     pygame.display.update()
