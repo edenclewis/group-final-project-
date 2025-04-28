@@ -52,7 +52,7 @@ blank_box = pygame.Rect(GRID_COLS * tile_size,0, BLANK_BOX_WIDTH, SCREEN_HEIGHT)
 pygame.draw.rect(SCREEN, GREY, blank_box)
 ## drawing parts of the crossword --> try to make this part of the code more efficent 
 
-
+clickCount = 1
 # Add event handling to the main loop
 run = True
 while run:
@@ -60,6 +60,8 @@ while run:
         if event.type == QUIT:
             run = False
         if event.type == MOUSEBUTTONDOWN:
+            clickCount += 1
+            print(clickCount)
             mouse_x, mouse_y = event.pos ## get the mouse position
             ## converts that position to grid coordinates
             col = mouse_x // tile_size
@@ -71,8 +73,10 @@ while run:
                      ##set color of box equal to yellow color 
                     matrix_grid[row][col] = 2
                     pygame.draw.rect(SCREEN, YELLOW, (col * tile_size, row * tile_size, tile_size, tile_size))
-                else: 
-                    matrix_grid[row][col] == 1
+                    
+                elif matrix_grid[row][col] == 2: 
+                    matrix_grid[row][col] = 0
+                    
     draw_grid(tile_size)
     pygame.display.update()
 pygame.quit()
