@@ -73,10 +73,10 @@ while run:
                      ##set color of box equal to yellow color 
                     matrix_grid[row][col] = 2
                     pygame.draw.rect(SCREEN, YELLOW, (col * tile_size, row * tile_size, tile_size, tile_size))
-
+                    
                 elif matrix_grid[row][col] == 2: 
                     matrix_grid[row][col] = 0
-
+                    
     draw_grid(tile_size)
     pygame.display.update()
 pygame.quit()
