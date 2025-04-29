@@ -64,7 +64,7 @@ while run:
             run = False
         if event.type == MOUSEBUTTONDOWN:
             clickCount += 1
-            print(clickCount)
+            # print(clickCount)
             mouse_x, mouse_y = event.pos ## get the mouse position
             ## converts that position to grid coordinates
             col = mouse_x // tile_size
@@ -72,20 +72,62 @@ while run:
             ## check if mouse position within grid 
             if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS:
                 ## if its within the grid, turn the tile on or off
-                if matrix_grid[row][col] == 0:
-                     ##set color of box equal to yellow color 
+                if matrix_grid[row][col] == 0 or matrix_grid[row][col] == 3: ## if the tile is white or blue
+                     ## set tile color to yellow 
                     matrix_grid[row][col] = 2
-                ## if the tile is yellow, set it back to white
-                elif matrix_grid[row][col] == 2: 
-                    matrix_grid[row][col] = 0
-                    ##if the tile is not black, set the columns to the right of the tile to blue 
-                if matrix_grid[row][col] != 1:
-                    next_column = col + 1 ## variable defined as column next to the one that you clicked on 
-                    while next_column < GRID_COLS: ## makes sure that the column next to the one you clicked is within the grid
-                        if matrix_grid[row][next_column] == 1: ## if the column next to the one you clicked is black then get out of while loop
+                    loopThruColumns(3)
+
+                elif matrix_grid[row][col] == 2: ## if the tile is yellow
+                    loopThruRows(3) ## goes vertically on second click of tile
+
+                    ## matrix_grid[row][col] = 0 ## THIS IS WHERE YOU SHOULD SWITCH DIRECTIONS!!
+
+                # if col < GRID_COLS and row < GRID_ROWS and (matrix_grid[row][col + 1] == 3):
+                #     print(matrix_grid[row][col])
+                #     loopThruColumns(0)
+                
+
+    def loopThruColumns(desiredColor):
+        if matrix_grid[row][col] != 1:
+                    next_col = col + 1 ## variable defined as column next to the one that you clicked on
+                    prev_col = col - 1 ## variable defined as column before the one that you clicked on
+
+                    while next_col < GRID_COLS: ## makes sure that the column next to the one you clicked is within the grid
+                        if matrix_grid[row][next_col] == 1: ## if the column next to the one you clicked is black then get out of while loop
                             break
-                        matrix_grid[row][next_column] = 3 ## if column is not black, then you set the color of the column next to the one you clicked to blue 
-                        next_column += 1 ## now do the column two away from the one you clicked and so on until you reach the end of the word/grid 
+                        
+                        matrix_grid[row][next_col] = desiredColor ## if column is not black, then you set the color of the column next to the one you clicked to blue 
+
+                        next_col += 1 ## now do the column two away from the one you clicked and so on until you reach the end of the word/grid 
+
+                    while prev_col < GRID_COLS:
+                        if matrix_grid[row][prev_col] == 1:
+                            break
+
+                        matrix_grid[row][prev_col] = desiredColor
+
+                        prev_col -= 1
+
+    def loopThruRows(desiredColor):
+            if matrix_grid[row][col] != 1:
+                    next_row = row + 1 ## variable defined as row next to the one that you clicked on
+                    prev_row = row - 1 ## variable defined as row before the one that you clicked on
+
+                    while next_row < GRID_ROWS: ## makes sure that the row next to the one you clicked is within the grid
+                        if matrix_grid[next_row][col] == 1: ## if the row next to the one you clicked is black then get out of while loop
+                            break
+                        
+                        matrix_grid[next_row][col] = desiredColor ## if row is not black, then you set the color of the row next to the one you clicked to blue 
+
+                        next_row += 1 ## now do the row two away from the one you clicked and so on until you reach the end of the word/grid 
+
+                    while prev_row < GRID_ROWS:
+                        if matrix_grid[prev_row][col] == 1:
+                            break
+
+                        matrix_grid[prev_row][col] = desiredColor
+
+                        prev_row -= 1
                     
     draw_grid(tile_size)
     pygame.display.update()
