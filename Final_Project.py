@@ -54,8 +54,15 @@ def draw_grid(tile_size):
 blank_box = pygame.Rect(GRID_COLS * tile_size,0, BLANK_BOX_WIDTH, SCREEN_HEIGHT)
 pygame.draw.rect(SCREEN, GREY, blank_box)
 ## drawing parts of the crossword --> try to make this part of the code more efficent 
-
-clickCount = 1
+def clear_grid():
+    for row in range(GRID_ROWS):
+        for col in range(GRID_COLS):
+            if matrix_grid[row][col] == 2 or matrix_grid[row][col] == 3:
+                matrix_grid[row][col] = 0 ## reset the grid to white
+clickCount = 0
+first_click = None
+second_click = None
+direction = "horizontal"
 # Add event handling to the main loop
 run = True
 while run:
@@ -63,30 +70,45 @@ while run:
         if event.type == QUIT:
             run = False
         if event.type == MOUSEBUTTONDOWN:
-            clickCount += 1
-            print(clickCount)
             mouse_x, mouse_y = event.pos ## get the mouse position
             ## converts that position to grid coordinates
             col = mouse_x // tile_size
-            row = mouse_y // tile_size
+            row = mouse_y // tile_size 
             ## check if mouse position within grid 
             if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS:
-                ## if its within the grid, turn the tile on or off
-                if matrix_grid[row][col] == 0:
-                     ##set color of box equal to yellow color 
-                    matrix_grid[row][col] = 2
-                ## if the tile is yellow, set it back to white
-                elif matrix_grid[row][col] == 2: 
-                    matrix_grid[row][col] = 0
-                    ##if the tile is not black, set the columns to the right of the tile to blue 
-                if matrix_grid[row][col] != 1:
-                    next_column = col + 1 ## variable defined as column next to the one that you clicked on 
-                    while next_column < GRID_COLS: ## makes sure that the column next to the one you clicked is within the grid
-                        if matrix_grid[row][next_column] == 1: ## if the column next to the one you clicked is black then get out of while loop
-                            break
-                        matrix_grid[row][next_column] = 3 ## if column is not black, then you set the color of the column next to the one you clicked to blue 
-                        next_column += 1 ## now do the column two away from the one you clicked and so on until you reach the end of the word/grid 
-                    
+                if clickCount == 0:      ## first click  
+                    clear_grid()
+                    first_click = (row,col)  ## store the first click index 
+                    matrix_grid[row][col] = 2 ## box clicked on turns yellow 
+                    direction = "horizontal" ## default direction 
+                    j = col + 1 ## check to the right of the box 
+                    while j < GRID_COLS and matrix_grid[row][j] != 1: ## if the right of the box is in the matrix and not black
+                        matrix_grid[row][j] = 3 ## change color of that box to light blue 
+                        j+= 1 ## move to the box two away from the one you clicked on 
+                        clickCount = 1 ## set the click count to 1 
+                elif clickCount == 1:  ## this would technically be the second click 
+                    clear_grid()
+                    second_click = (row,col) ## store the second click index
+                    if second_click == first_click:  ## if the seccond click is the same as the first click 
+                        direction = "vertical" # change the direction to vertical 
+                        matrix_grid[row][col] = 2
+                        i,j = row + 1, col # now check the box below the first click 
+                        while i < GRID_ROWS and matrix_grid[i][j] != 1: ## if the box below the first click is in the matrix and not black 
+                            matrix_grid[i][j] = 3 ## change the color of that box to light blue 
+                            i+= 1 ## move to the box two below the one that you clicked 
+                    else: ## if the first and second click aren't the same
+                        clear_grid()
+                        row,col = second_click  # store index of the second click 
+                        matrix_grid[row][col] = 2 ## change the color of the box to yellow 
+                        j = col + 1 ## check the box to the right of the clicked box 
+                        while j < GRID_COLS and matrix_grid[row][j] != 1:
+                            matrix_grid[row][j] = 3 # change the color of the box to the right of the clicked box to light blue 
+                            j+= 1
+                        direction = "horizontal" ## change direction to default 
+                        
+                    first_click = second_click ## make the second click the first click 
+                    clickCount = 1 # reset the click counter to 1
+                               
     draw_grid(tile_size)
     pygame.display.update()
 pygame.quit()
