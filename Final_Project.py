@@ -75,7 +75,7 @@ while run:
             col = mouse_x // tile_size
             row = mouse_y // tile_size 
             ## check if mouse position within grid 
-            if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS:
+            if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS and matrix_grid[row][col] != 1: ## if the mouse position is in the grid and not black
                 if clickCount == 0:      ## first click  
                     clear_grid()
                     first_click = (row,col)  ## store the first click index 
