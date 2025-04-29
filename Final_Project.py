@@ -89,7 +89,7 @@ while run:
                         next_col += 1 ## move to the box two away from the one you clicked on 
                         clickCount = 1 ## set the click count to 1 
 
-                    while prev_col < GRID_COLS and matrix_grid[row][prev_col] != 1: ## if the right of the box is in the matrix and not black
+                    while prev_col < GRID_COLS and matrix_grid[row][prev_col] != 1: ## if the left of the box is in the matrix and not black
                         matrix_grid[row][prev_col] = 3 ## change color of that box to light blue 
                         prev_col -= 1 ## move to the box two away from the one you clicked on 
                         clickCount = 1 ## set the click count to 1
@@ -97,7 +97,7 @@ while run:
                 elif clickCount == 1:  ## this would technically be the second click 
                     clear_grid()
                     second_click = (row,col) ## store the second click index
-                    if second_click == first_click:  ## if the seccond click is the same as the first click 
+                    if second_click == first_click:  ## if the second click is the same as the first click 
                         direction = "vertical" # change the direction to vertical 
                         matrix_grid[row][col] = 2
                         next_row, j = row + 1, col # now check the box below the first click 
@@ -107,9 +107,10 @@ while run:
                             next_row += 1 ## move to the box two below the one that you clicked 
                         
                         prev_row, j = row - 1, col # now check the box above the first click
-                        while prev_row < GRID_ROWS and matrix_grid[prev_row][j] != 1: ## if the box below the first click is in the matrix and not black 
+
+                        while prev_row < GRID_ROWS and matrix_grid[prev_row][j] != 1: ## if the box above the first click is in the matrix and not black 
                             matrix_grid[prev_row][j] = 3 ## change the color of that box to light blue 
-                            prev_row -= 1 ## move to the box two below the one that you clicked 
+                            prev_row -= 1 ## move to the box two above the one that you clicked 
 
                     else: ## if the first and second click aren't the same
                         clear_grid()
@@ -129,7 +130,7 @@ while run:
                         direction = "horizontal" ## change direction to default 
                         
                     first_click = second_click ## make the second click the first click 
-                    clickCount = 1 # reset the click counter to 1
+                    clickCount = 0 # reset the click counter to 0
                                
     draw_grid(tile_size)
     pygame.display.update()
