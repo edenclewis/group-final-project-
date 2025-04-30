@@ -22,6 +22,39 @@ SCREEN_HEIGHT = GRID_ROWS * tile_size
 # create the screen
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+#font setup
+font = pygame.font.Font(None, 24)
+text_color = pygame.Color("black")
+
+#crossword clue text
+text_lines = [
+    "DOWN",
+    "1. Programming language developed by Mathworks",
+    "3. The button you press to make a code execute",
+    "4. Platform used for storing, managing, and collaborating",
+    "on code",
+    "5. *",
+    "8. What you use when you’ve been working for 7 hours on",
+    "one line of code",
+    
+    "",
+
+    "ACROSS",
+    "2. Sequence of instructions a computer executes to perform",
+    "a task",
+    "6. Ordered sequence of immutable values",
+    "9. What you go into after finishing your final exam",
+    "10. Collections of prewritten code (abv)",
+    "11. Python library used for data analysis and manipulation"
+
+]
+
+#answer key
+def answer_key(surface, text_list, x_start, y_start, line_spacing = 30):
+    for ii, line in enumerate(text_list):
+        text_surface = font.render(line, False, text_color)
+        surface.blit(text_surface, (x_start, y_start + ii * line_spacing))
+
 #creating the matrix with white (0) and black (1) squares
 matrix_grid =      [[1,1,1,1,1,0,1,1,1,1,1,1], 
                    [0,0,0,0,0,0,0,1,1,1,1,1], 
@@ -32,9 +65,9 @@ matrix_grid =      [[1,1,1,1,1,0,1,1,1,1,1,1],
                    [1,0,0,0,0,1,0,0,0,0,0,0],
                    [1,1,1,1,1,1,0,1,1,1,1,1]]
 
+# Draw grid function
 def draw_grid(tile_size):
     ## fill screen 
-    SCREEN.fill(WHITE)
     for row in range(GRID_ROWS):
         for col in range(GRID_COLS):
             rect = pygame.Rect(col * tile_size, row * tile_size, tile_size, tile_size)
@@ -49,10 +82,6 @@ def draw_grid(tile_size):
             pygame.draw.rect(SCREEN, color, rect)
             pygame.draw.rect(SCREEN, BLACK, rect, 1)
             
-
-## draw blank box 
-blank_box = pygame.Rect(GRID_COLS * tile_size,0, BLANK_BOX_WIDTH, SCREEN_HEIGHT)
-pygame.draw.rect(SCREEN, GREY, blank_box)
 ## drawing parts of the crossword --> try to make this part of the code more efficent 
 def clear_grid():
     for row in range(GRID_ROWS):
@@ -131,7 +160,13 @@ while run:
                         
                     first_click = second_click ## make the second click the first click 
                     clickCount = 0 # reset the click counter to 0
-                               
+    SCREEN.fill(WHITE)                          
     draw_grid(tile_size)
+
+    ## draw blank box 
+    blank_box = pygame.Rect(GRID_COLS * tile_size,0, BLANK_BOX_WIDTH, SCREEN_HEIGHT)
+    pygame.draw.rect(SCREEN, WHITE, blank_box)
+    answer_key(SCREEN, text_lines, x_start=GRID_COLS * tile_size + 20, y_start=20)
+
     pygame.display.update()
 pygame.quit()
