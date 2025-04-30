@@ -24,7 +24,7 @@ SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 font = pygame.font.Font(None, 30)
 active = True ## CHANGE SOON
 text = ''
-numbers = ['1','2','3','4','5','6','7','8','9','10','11','12']
+numbers = [1,2,3,4,5,6,7,8,9,10,11]
 
 #creating the matrix with white (0) and black (1) squares
 matrix_grid =      [[1,1,1,1,1,0,1,1,1,1,1,1], 
@@ -148,24 +148,28 @@ while run:
 
     draw_grid(tile_size)
 
-    num_surface = font.render(numbers[0], True, BLACK)
-    num_surface2 = font.render(numbers[1], True, BLACK)
-    num_surface3 = font.render(numbers[2], True, BLACK)
-    num_surface4 = font.render(numbers[3], True, BLACK)
-    num_surface5 = font.render(numbers[4], True, BLACK)
-    num_surface6 = font.render(numbers[5], True, BLACK)
-    num_surface7 = font.render(numbers[6], True, BLACK)
-    num_surface8 = font.render(numbers[7], True, BLACK)
+    numSurfaceArray = []
+    coordinateArray = [[405,5],
+                       [5,85],
+                       [85,85],
+                       [245,85],
+                       [485,85],
+                       [405,165],
+                       [5,245],
+                       [325,245],
+                       [245,325],
+                       [85,485],
+                       [485,485]] ## x,y coordinates of the numbers in the blank box
 
+    for i in numbers:
+        ## create a surface for each number in the numbers list, render the number on the surface, append the surface to the numSurfaceArray
+        numSurfaceArray.append(font.render(str(i), True, BLACK))
 
-    SCREEN.blit(num_surface, (400,0)) ## blit the text to the blank box, x coordinate is tile_size * column number (80 times 5)
-    SCREEN.blit(num_surface2, (0,80))
-    SCREEN.blit(num_surface3, (80,80))
-    SCREEN.blit(num_surface4, (240,80))
-    SCREEN.blit(num_surface5, (480,80))
-    SCREEN.blit(num_surface6, (400,160))
-    SCREEN.blit(num_surface7, (0,240))
-    SCREEN.blit(num_surface8, (320,240))
+        ## looks like this: [font.render(numbers[0], True, BLACK), font.render(numbers[1], True, BLACK), font.render(numbers[2], True, BLACK), ...]
+
+    for i, j in enumerate(range(len(numbers))):
+        SCREEN.blit(numSurfaceArray[i], (coordinateArray[j][0], coordinateArray[j][1]))
+
 
     pygame.display.update()
     
