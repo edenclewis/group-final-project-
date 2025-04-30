@@ -24,8 +24,7 @@ SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 font = pygame.font.Font(None, 30)
 active = True ## CHANGE SOON
 text = ''
-
-print('hello')
+numbers = ['1','2','3','4','5','6','7','8','9','10','11','12']
 
 #creating the matrix with white (0) and black (1) squares
 matrix_grid =      [[1,1,1,1,1,0,1,1,1,1,1,1], 
@@ -55,7 +54,7 @@ def draw_grid(tile_size):
             pygame.draw.rect(SCREEN, BLACK, rect, 1)
             
 ## draw blank box 
-blank_box = pygame.Rect(GRID_COLS * tile_size,0, BLANK_BOX_WIDTH, SCREEN_HEIGHT)
+blank_box = pygame.Rect(GRID_COLS * tile_size, 0, BLANK_BOX_WIDTH, SCREEN_HEIGHT)
 pygame.draw.rect(SCREEN, GREY, blank_box)
 ## drawing parts of the crossword --> try to make this part of the code more efficent 
 def clear_grid():
@@ -138,14 +137,36 @@ while run:
         if event.type == KEYDOWN:
             if active:
                 if event.key == K_a:
-                    text = 'A'
+                    text += 'A'
                     print(text)
                 elif event.key == K_b:
-                    text = 'B'
+                    text += 'B'
                     print(text)
+                elif event.key == K_BACKSPACE:
+                    text = text[:-1]
                 
-    text_surface = font.render(text, True, BLACK)
-    # SCREEN.blit(text_surface, ))
+
     draw_grid(tile_size)
+
+    num_surface = font.render(numbers[0], True, BLACK)
+    num_surface2 = font.render(numbers[1], True, BLACK)
+    num_surface3 = font.render(numbers[2], True, BLACK)
+    num_surface4 = font.render(numbers[3], True, BLACK)
+    num_surface5 = font.render(numbers[4], True, BLACK)
+    num_surface6 = font.render(numbers[5], True, BLACK)
+    num_surface7 = font.render(numbers[6], True, BLACK)
+    num_surface8 = font.render(numbers[7], True, BLACK)
+
+
+    SCREEN.blit(num_surface, (400,0)) ## blit the text to the blank box, x coordinate is tile_size * column number (80 times 5)
+    SCREEN.blit(num_surface2, (0,80))
+    SCREEN.blit(num_surface3, (80,80))
+    SCREEN.blit(num_surface4, (240,80))
+    SCREEN.blit(num_surface5, (480,80))
+    SCREEN.blit(num_surface6, (400,160))
+    SCREEN.blit(num_surface7, (0,240))
+    SCREEN.blit(num_surface8, (320,240))
+
     pygame.display.update()
+    
 pygame.quit()
