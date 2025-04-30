@@ -21,6 +21,9 @@ SCREEN_WIDTH = (GRID_COLS * tile_size) + BLANK_BOX_WIDTH
 SCREEN_HEIGHT = GRID_ROWS * tile_size
 # create the screen
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+font = pygame.font.Font(None, 30)
+active = True ## CHANGE SOON
+text = ''
 
 #creating the matrix with white (0) and black (1) squares
 matrix_grid =      [[1,1,1,1,1,0,1,1,1,1,1,1], 
@@ -131,6 +134,9 @@ while run:
                         
                     first_click = second_click ## make the second click the first click 
                     clickCount = 0 # reset the click counter to 0
+        if event.type == KEYDOWN:
+            if active:
+                
                                
     draw_grid(tile_size)
     pygame.display.update()
