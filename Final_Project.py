@@ -25,6 +25,8 @@ font = pygame.font.Font(None, 30)
 active = True ## CHANGE SOON
 text = ''
 
+print('hello')
+
 #creating the matrix with white (0) and black (1) squares
 matrix_grid =      [[1,1,1,1,1,0,1,1,1,1,1,1], 
                    [0,0,0,0,0,0,0,1,1,1,1,1], 
@@ -52,7 +54,6 @@ def draw_grid(tile_size):
             pygame.draw.rect(SCREEN, color, rect)
             pygame.draw.rect(SCREEN, BLACK, rect, 1)
             
-
 ## draw blank box 
 blank_box = pygame.Rect(GRID_COLS * tile_size,0, BLANK_BOX_WIDTH, SCREEN_HEIGHT)
 pygame.draw.rect(SCREEN, GREY, blank_box)
@@ -136,8 +137,15 @@ while run:
                     clickCount = 0 # reset the click counter to 0
         if event.type == KEYDOWN:
             if active:
+                if event.key == K_a:
+                    text = 'A'
+                    print(text)
+                elif event.key == K_b:
+                    text = 'B'
+                    print(text)
                 
-                               
+    text_surface = font.render(text, True, BLACK)
+    # SCREEN.blit(text_surface, ))
     draw_grid(tile_size)
     pygame.display.update()
 pygame.quit()
