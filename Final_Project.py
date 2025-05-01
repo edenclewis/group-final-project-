@@ -117,12 +117,12 @@ while run:
                     while next_col < GRID_COLS and matrix_grid[row][next_col] != 1: ## if the right of the box is in the matrix and not black
                         matrix_grid[row][next_col] = 3 ## change color of that box to light blue 
                         next_col += 1 ## move to the box two away from the one you clicked on 
-                        clickCount = 1 ## set the click count to 1 
-
+                    
                     while prev_col < GRID_COLS and matrix_grid[row][prev_col] != 1: ## if the left of the box is in the matrix and not black
                         matrix_grid[row][prev_col] = 3 ## change color of that box to light blue 
                         prev_col -= 1 ## move to the box two away from the one you clicked on 
-                        clickCount = 1 ## set the click count to 1
+                    
+                    clickCount = 1 ## set the click count to 1
 
                 elif clickCount == 1:  ## this would technically be the second click 
                     clear_grid()
