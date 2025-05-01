@@ -24,7 +24,7 @@ SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 font = pygame.font.Font(None, 30)
 active = True ## CHANGE SOON
 text = ''
-numbers = [1,2,3,4,5,6,7,8,9,10,11]
+numbers = [x for x in range(1, 12)] ## list of numbers to be displayed in the blank box
 
 #creating the matrix with white (0) and black (1) squares
 matrix_grid =      [[1,1,1,1,1,0,1,1,1,1,1,1], 
@@ -160,7 +160,8 @@ while run:
                        [245,325],
                        [85,485],
                        [485,485]] ## x,y coordinates of the numbers in the blank box
-
+    
+    ## CREATE FUNCTION CALLED DRAW_NUMBERS AND CALL IT HERE
     for i in numbers:
         ## create a surface for each number in the numbers list, render the number on the surface, append the surface to the numSurfaceArray
         numSurfaceArray.append(font.render(str(i), True, BLACK))
