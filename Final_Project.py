@@ -25,7 +25,7 @@ SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 font = pygame.font.Font(None, 30)
 active = True ## CHANGE SOON
 text = ''
-numbers = [x for x in range(1, 12)] ## list of numbers to be displayed in the blank box
+numbers = [x for x in range(1, 14)] ## list of numbers to be displayed in the blank box
 
 #font setup
 font = pygame.font.Font(None, 24)
@@ -207,17 +207,19 @@ while run:
     draw_grid(tile_size)
 
     numSurfaceArray = []
-    coordinateArray = [[405,5],
-                       [5,85],
-                       [85,85],
-                       [245,85],
-                       [485,85],
-                       [405,165],
-                       [5,245],
-                       [325,245],
-                       [245,325],
-                       [85,485],
-                       [485,485]] ## x,y coordinates of the numbers in the blank box
+    coordinateArray = [[405,5],    #1
+                       [5,85],     #2
+                       [85,85],    #3
+                       [245,85],   #4
+                       [485,85],   #5
+                       [405,165],  #6
+                       [5,245],    #7
+                       [325,245],  #8
+                       [245,325],  #9
+                       [85,485],   #10
+                       [485,485],  #11
+                       [405,405],  #12
+                       [565,325]]  #13   ## x,y coordinates of the numbers in the blank box
     
     ## CREATE FUNCTION CALLED DRAW_NUMBERS AND CALL IT HERE
     for i in numbers:
