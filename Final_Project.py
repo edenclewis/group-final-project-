@@ -89,7 +89,7 @@ def draw_grid(tile_size):
             pygame.draw.rect(SCREEN, BLACK, rect, 1)
 
             if char_grid[row][col] != "":
-                text_surface = font_for_grid.render(char_grid[row][col], True, text_color)
+                text_surface = font_for_grid.render(char_grid[row][col].upper(), True, text_color)
                 text_rect = text_surface.get_rect(center=rect.center)
                 SCREEN.blit(text_surface, text_rect)
             
