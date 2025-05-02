@@ -42,7 +42,9 @@ text_lines = [
     "5. *",
     "8. What you use when you’ve been working for 7 hours on",
     "one line of code",
-    
+    "10. Students who help Alekh with teaching responsibilities",
+    "(and help us too!)",
+
     "",
 
     "ACROSS",
@@ -51,12 +53,13 @@ text_lines = [
     "6. Ordered sequence of immutable values",
     "9. What you go into after finishing your final exam",
     "10. Collections of prewritten code (abv)",
-    "11. Python library used for data analysis and manipulation"
+    "11. Smallest unit of data represented in 0s or 1s (abv)",
+    "12. Python library used for data analysis and manipulation"
 
 ]
 char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] 
 #answer key
-def answer_key(surface, text_list, x_start, y_start, line_spacing = 30):
+def answer_key(surface, text_list, x_start, y_start, line_spacing = 25):
     for ii, line in enumerate(text_list):
         text_surface = font.render(line, False, text_color)
         surface.blit(text_surface, (x_start, y_start + ii * line_spacing))
@@ -216,10 +219,11 @@ while run:
                        [5,245],    #7
                        [325,245],  #8
                        [245,325],  #9
-                       [85,485],   #10
-                       [485,485],  #11
-                       [405,405],  #12
-                       [565,325]]  #13   ## x,y coordinates of the numbers in the blank box
+                       [565,325],  #10
+                       [405,405],  #11
+                       [85,485],   #12
+                       [485,485],  #13
+                       ]   ## x,y coordinates of the numbers in the blank box
     
     ## CREATE FUNCTION CALLED DRAW_NUMBERS AND CALL IT HERE
     for i in numbers:
