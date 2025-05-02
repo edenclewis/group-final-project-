@@ -22,10 +22,15 @@ SCREEN_WIDTH = (GRID_COLS * tile_size) + BLANK_BOX_WIDTH
 SCREEN_HEIGHT = GRID_ROWS * tile_size
 # create the screen
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+font = pygame.font.Font(None, 30)
+active = True ## CHANGE SOON
+text = ''
+numbers = [x for x in range(1, 12)] ## list of numbers to be displayed in the blank box
 
 #font setup
 font = pygame.font.Font(None, 24)
 text_color = pygame.Color("black")
+font_for_grid = pygame.font.Font(None, 50)
 
 #crossword clue text
 text_lines = [
@@ -49,7 +54,7 @@ text_lines = [
     "11. Python library used for data analysis and manipulation"
 
 ]
-
+char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] 
 #answer key
 def answer_key(surface, text_list, x_start, y_start, line_spacing = 30):
     for ii, line in enumerate(text_list):
@@ -65,7 +70,7 @@ matrix_grid =      [[1,1,1,1,1,0,1,1,1,1,1,1],
                    [1,1,1,0,1,0,0,1,1,1,1,1], 
                    [1,0,0,0,0,1,0,0,0,0,0,0],
                    [1,1,1,1,1,1,0,1,1,1,1,1]]
-
+## creating a grid to handle the characters in the crossword 
 # Draw grid function
 def draw_grid(tile_size):
     ## fill screen 
@@ -82,7 +87,16 @@ def draw_grid(tile_size):
                 color = LIGHT_BLUE
             pygame.draw.rect(SCREEN, color, rect)
             pygame.draw.rect(SCREEN, BLACK, rect, 1)
+
+            if char_grid[row][col] != "":
+                text_surface = font_for_grid.render(char_grid[row][col], True, text_color)
+                text_rect = text_surface.get_rect(center=rect.center)
+                SCREEN.blit(text_surface, text_rect)
             
+## draw blank box 
+blank_box = pygame.Rect(GRID_COLS * tile_size, 0, BLANK_BOX_WIDTH, SCREEN_HEIGHT)
+pygame.draw.rect(SCREEN, GREY, blank_box)
+
 ## drawing parts of the crossword --> try to make this part of the code more efficent 
 def clear_grid():
     for row in range(GRID_ROWS):
@@ -161,6 +175,26 @@ while run:
                         
                     first_click = second_click ## make the second click the first click 
                     clickCount = 0 # reset the click counter to 0
+                
+        if event.type == pygame.KEYDOWN: ## if the key is pressed      
+            if event.key == pygame.K_BACKSPACE:
+                char_grid[row][col] = ""
+                if direction == "horizontal":
+                    col-= 1 #go back to the previous column
+                else: 
+                    row-=1 # go back to the previous row 
+            else:
+                char_grid[row][col] = event.unicode ## stores the character that was typed in the cell 
+                if direction == "horizontal":
+                    col+= 1 # go to the next column
+                else:
+                    row+=1 # go to the next row 
+            if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS and matrix_grid[row][col] != 1:   
+                first_click = (row,col) ## store the first click index
+            else:
+                first_click = None ## if the next cell is out of bounds, set the first click to None
+                   
+              
     SCREEN.fill(WHITE)                          
     draw_grid(tile_size)
 
@@ -168,6 +202,33 @@ while run:
     blank_box = pygame.Rect(GRID_COLS * tile_size,0, BLANK_BOX_WIDTH, SCREEN_HEIGHT)
     pygame.draw.rect(SCREEN, WHITE, blank_box)
     answer_key(SCREEN, text_lines, x_start=GRID_COLS * tile_size + 20, y_start=20)
+                
+
+    draw_grid(tile_size)
+
+    numSurfaceArray = []
+    coordinateArray = [[405,5],
+                       [5,85],
+                       [85,85],
+                       [245,85],
+                       [485,85],
+                       [405,165],
+                       [5,245],
+                       [325,245],
+                       [245,325],
+                       [85,485],
+                       [485,485]] ## x,y coordinates of the numbers in the blank box
+    
+    ## CREATE FUNCTION CALLED DRAW_NUMBERS AND CALL IT HERE
+    for i in numbers:
+        ## create a surface for each number in the numbers list, render the number on the surface, append the surface to the numSurfaceArray
+        numSurfaceArray.append(font.render(str(i), True, BLACK))
+
+        ## looks like this: [font.render(numbers[0], True, BLACK), font.render(numbers[1], True, BLACK), font.render(numbers[2], True, BLACK), ...]
+
+    for i, j in enumerate(range(len(numbers))):
+        SCREEN.blit(numSurfaceArray[i], (coordinateArray[j][0], coordinateArray[j][1]))
 
     pygame.display.update()
+    
 pygame.quit()
