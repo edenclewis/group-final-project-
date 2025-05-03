@@ -178,18 +178,18 @@ while run:
                 
         if event.type == pygame.KEYDOWN: ## if the key is pressed      
             if event.key == pygame.K_BACKSPACE:
-                char_grid[row][col] = ""
-                if direction == "horizontal":
+                char_grid[row][col] = "" ## cleaar the character in the cell char_grid
+                if direction == "horizontal": ## if the direction is horizontal 
                     col-= 1 #go back to the previous column
-                else: 
+                else:  ## direction is vertical 
                     row-=1 # go back to the previous row 
             else:
                 char_grid[row][col] = event.unicode ## stores the character that was typed in the cell 
-                if direction == "horizontal":
+                if direction == "horizontal": ## if direction is horizontal 
                     col+= 1 # go to the next column
                 else:
                     row+=1 # go to the next row 
-            if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS and matrix_grid[row][col] != 1:   
+            if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS and matrix_grid[row][col] != 1:   ## if in grid and not black 
                 first_click = (row,col) ## store the first click index
             else:
                 first_click = None ## if the next cell is out of bounds, set the first click to None
