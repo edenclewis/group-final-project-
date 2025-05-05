@@ -245,11 +245,11 @@ while run:
                 first_click = None ## if the next cell is out of bounds, set the first click to None
 
     numSurfaceArray = []
-    coordinateArray = [[405,155],    #1
-                       [5,235],     #2
-                       [85,235],    #3
-                       [245,235],   #4
-                       [485,235],   #5
+    coordinateArray = [[405,155],  #1
+                       [5,235],    #2
+                       [85,235],   #3
+                       [245,235],  #4
+                       [485,235],  #5
                        [405,315],  #6
                        [5,395],    #7
                        [325,395],  #8
