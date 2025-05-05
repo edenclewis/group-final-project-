@@ -1,6 +1,7 @@
 # Final Project: Crossword Game
 # Import Modules
 
+
 import pygame
 from pygame.locals import *
 
@@ -160,7 +161,7 @@ while run:
             if clear_button.collidepoint(mouse_x,mouse_y):
                 clear_grid()
                 char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the char_grid to empty
-        
+            
             
 
     
@@ -272,7 +273,7 @@ while run:
     #displaying hints in the blank box
     SCREEN.fill(WHITE)                          
     draw_grid(tile_size)
-    crossword_clues(SCREEN, text_lines, x_start=GRID_COLS * tile_size + 20, y_start=0)    
+    crossword_clues(SCREEN, text_lines, x_start=GRID_COLS * tile_size + 20, y_start=20)    
 
     title(SCREEN, title_text, x_start= 400, y_start=50) 
 
