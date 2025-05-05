@@ -245,31 +245,21 @@ while run:
                 first_click = None ## if the next cell is out of bounds, set the first click to None
 
     numSurfaceArray = []
-    coordinateArray = [[405,5],    #1
-                       [5,85],     #2
-                       [85,85],    #3
-                       [245,85],   #4
-                       [485,85],   #5
-                       [405,165],  #6
-                       [5,245],    #7
-                       [325,245],  #8
-                       [245,325],  #9
-                       [565,325],  #10
-                       [405,405],  #11
-                       [85,485],   #12
-                       [485,485],  #13
+    coordinateArray = [[405,155],    #1
+                       [5,235],     #2
+                       [85,235],    #3
+                       [245,235],   #4
+                       [485,235],   #5
+                       [405,315],  #6
+                       [5,395],    #7
+                       [325,395],  #8
+                       [245,475],  #9
+                       [565,475],  #10
+                       [405,555],  #11
+                       [85,635],   #12
+                       [485,635],  #13
                        ]   ## x,y coordinates of the numbers in the matrix_grid 
     
-    ## CREATE FUNCTION CALLED DRAW_NUMBERS AND CALL IT HERE
-    for i in numbers:
-        ## create a surface for each number in the numbers list, render the number on the surface, append the surface to the numSurfaceArray
-        numSurfaceArray.append(font.render(str(i), True, BLACK))
-
-        ## looks like this: [font.render(numbers[0], True, BLACK), font.render(numbers[1], True, BLACK), font.render(numbers[2], True, BLACK), ...]
-
-    for i, j in enumerate(range(len(numbers))):
-        SCREEN.blit(numSurfaceArray[i], (coordinateArray[j][0], coordinateArray[j][1]))
-
     #displaying hints in the blank box
     SCREEN.fill(WHITE)                          
     draw_grid(tile_size)
@@ -289,6 +279,16 @@ while run:
     button_text2 = button_font.render("Clear", True, BLACK) ## button text
     text_center2 = button_text2.get_rect(center=clear_button.center) ## center the text on the button
     SCREEN.blit(button_text2, text_center2) ## blit the text on the button (basically put the text on top of the button)
+
+    ## CREATE FUNCTION CALLED DRAW_NUMBERS AND CALL IT HERE
+    for i in numbers:
+        ## create a surface for each number in the numbers list, render the number on the surface, append the surface to the numSurfaceArray
+        numSurfaceArray.append(font.render(str(i), True, BLACK))
+
+        ## looks like this: [font.render(numbers[0], True, BLACK), font.render(numbers[1], True, BLACK), font.render(numbers[2], True, BLACK), ...]
+
+    for i, j in enumerate(range(len(numbers))):
+        SCREEN.blit(numSurfaceArray[i], (coordinateArray[j][0], coordinateArray[j][1]))
 
     pygame.display.update()
     
