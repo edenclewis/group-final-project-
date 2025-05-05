@@ -157,7 +157,10 @@ while run:
             run = False
         if event.type == MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos ## get the mouse position
-            
+            if clear_button.collidepoint(mouse_x,mouse_y):
+                clear_grid()
+                char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the char_grid to empty
+        
             
 
     
@@ -254,7 +257,7 @@ while run:
                        [405,405],  #11
                        [85,485],   #12
                        [485,485],  #13
-                       ]   ## x,y coordinates of the numbers in the blank box
+                       ]   ## x,y coordinates of the numbers in the matrix_grid 
     
     ## CREATE FUNCTION CALLED DRAW_NUMBERS AND CALL IT HERE
     for i in numbers:
