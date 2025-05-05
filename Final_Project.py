@@ -17,9 +17,9 @@ RED = (255,0,0)
 GREEN = (0,255,0)
 #set up the screen 
 GRID_COLS = 12  # 
-GRID_ROWS = 8  # 7 rows of tiles
+GRID_ROWS = 9  # 7 rows of tiles
 BLANK_BOX_WIDTH = 500
-TITLE_BOX_HEIGHT = 150
+TITLE_BOX_HEIGHT = 100
 tile_size = 80
 SCREEN_WIDTH = (GRID_COLS * tile_size) + BLANK_BOX_WIDTH
 SCREEN_HEIGHT = TITLE_BOX_HEIGHT + (GRID_ROWS * tile_size) 
@@ -87,8 +87,9 @@ matrix_grid =      [[1,1,1,1,1,0,1,1,1,1,1,1],
                    [1,1,1,0,0,0,0,0,0,1,1,1], 
                    [1,1,1,0,1,0,0,0,1,1,1,1], 
                    [1,0,0,0,0,1,0,0,0,0,0,0],
-
-                   [1,1,1,1,1,1,0,1,1,1,1,1]]
+                   [1,1,1,1,1,1,0,1,1,1,1,1],
+                   [1,1,1,1,1,1,0,1,1,1,1,1]
+                   ]
 
 ### matrix to store the crossword solutions 
 answer_grid = [
@@ -161,8 +162,15 @@ while run:
             if clear_button.collidepoint(mouse_x,mouse_y):
                 clear_grid()
                 char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the char_grid to empty
-            
-            
+
+        if event.type == MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = event.pos ## get the mouse position
+            if check_button.collidepoint(mouse_x, mouse_y): #if the check button has been pressed
+                if char_grid == answer_grid:
+                    print("correct")
+                else:
+                    print("no")
+                
 
     
             ## converts that position to grid coordinates 
@@ -245,11 +253,11 @@ while run:
                 first_click = None ## if the next cell is out of bounds, set the first click to None
 
     numSurfaceArray = []
-    coordinateArray = [[405,155],  #1
-                       [5,235],    #2
-                       [85,235],   #3
-                       [245,235],  #4
-                       [485,235],  #5
+    coordinateArray = [[405,155],    #1
+                       [5,235],     #2
+                       [85,235],    #3
+                       [245,235],   #4
+                       [485,235],   #5
                        [405,315],  #6
                        [5,395],    #7
                        [325,395],  #8
@@ -265,7 +273,7 @@ while run:
     draw_grid(tile_size)
     crossword_clues(SCREEN, text_lines, x_start=GRID_COLS * tile_size + 20, y_start=20)    
 
-    title(SCREEN, title_text, x_start= 400, y_start=50) 
+    title(SCREEN, title_text, x_start= 400, y_start=20) 
 
     ##displaying the button to check the answers with the typed words 
     button_font = pygame.font.Font(None, 48) ## button font 
