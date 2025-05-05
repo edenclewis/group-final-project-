@@ -269,7 +269,7 @@ while run:
     #displaying hints in the blank box
     SCREEN.fill(WHITE)                          
     draw_grid(tile_size)
-    crossword_clues(SCREEN, text_lines, x_start=GRID_COLS * tile_size + 20, y_start=20)    
+    crossword_clues(SCREEN, text_lines, x_start=GRID_COLS * tile_size + 20, y_start=0)    
 
     title(SCREEN, title_text, x_start= 400, y_start=50) 
 
