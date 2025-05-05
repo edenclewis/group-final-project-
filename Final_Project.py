@@ -38,6 +38,8 @@ numbers = [x for x in range(1, 14)] ## list of numbers to be displayed in the bl
 #font setup
 font = pygame.font.Font(None, 24)
 text_color = pygame.Color("black")
+correct_color = pygame.Color("green")
+incorrect_color = pygame.Color("red")
 font_for_grid = pygame.font.Font(None, 50)
 title_font = pygame.font.Font(None, 100)
 
@@ -67,6 +69,7 @@ text_lines = [
 
 ]
 char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the characters typed by the user into the grid 
+color_grid = [[text_color for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the colors of the characters typed by the user into the grid 
 # #crossword clues 
 def crossword_clues(surface, text_list, x_start, y_start, line_spacing = 25):
     for ii, line in enumerate(text_list):
@@ -119,17 +122,13 @@ def draw_grid(tile_size):
                 color = YELLOW
             elif matrix_grid[row][col] == 3:
                 color = LIGHT_BLUE
-            elif matrix_grid[row][col] == 4:
-                color = RED 
-            elif matrix_grid[row][col] == 5:
-                color = GREEN
             pygame.draw.rect(SCREEN, color, rect)
             pygame.draw.rect(SCREEN, BLACK, rect, 1)
 
             if char_grid[row][col] != "":
-                text_surface = font_for_grid.render(char_grid[row][col].upper(), True, text_color)
-                text_rect = text_surface.get_rect(center=rect.center)
-                SCREEN.blit(text_surface, text_rect)
+                text_surface = font_for_grid.render(char_grid[row][col].upper(), True, color_grid[row][col]) ## create a surface for the text 
+                text_rect = text_surface.get_rect(center=rect.center) ## center the text on the cell
+                SCREEN.blit(text_surface, text_rect) ## put the text on the screen 
 
 # draw title box
 title_box = pygame.Rect(0, 0, SCREEN_WIDTH, TITLE_BOX_HEIGHT)
@@ -160,23 +159,22 @@ while run:
             run = False
         if event.type == MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos ## get the mouse position
-            if clear_button.collidepoint(mouse_x,mouse_y):
-                clear_grid()
-                char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the char_grid to empty
-
-        if event.type == MOUSEBUTTONDOWN:
-            mouse_x, mouse_y = event.pos ## get the mouse position
-            if check_button.collidepoint(mouse_x, mouse_y): #if the check button has been pressed
-                if char_grid == answer_grid:
-                    print("correct")
-                else:
-                    print("no")
-                
-
-    
             ## converts that position to grid coordinates 
             col = mouse_x // tile_size
             row = (mouse_y - TITLE_BOX_HEIGHT) // tile_size
+            if clear_button.collidepoint(mouse_x,mouse_y):
+                clear_grid()
+                char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the char_grid to empty
+                color_grid = [[text_color for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the color_grid to black
+            rect = pygame.Rect(col * tile_size, TITLE_BOX_HEIGHT + row * tile_size, tile_size, tile_size)
+            if check_button.collidepoint(mouse_x, mouse_y): #if the check button has been pressed
+                for row in range(GRID_ROWS):
+                    for col in range(GRID_COLS):
+                        if matrix_grid[row][col] != 1: 
+                            if char_grid[row][col].upper() == answer_grid[row][col].upper():
+                                color_grid[row][col] = GREEN
+                            else:
+                                color_grid[row][col] = RED
             ## check if mouse position within grid 
             if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS and matrix_grid[row][col] != 1: ## if the mouse position is in the grid and not black
                 if clickCount == 0:      ## first click  
