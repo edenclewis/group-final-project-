@@ -1,6 +1,6 @@
 # Final Project: Crossword Game
 # Import Modules
-#pushed again for eden
+
 import pygame
 from pygame.locals import *
 
@@ -9,8 +9,11 @@ pygame.init()
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREY = (200,200,200)
+LIGHT_GREY = (211,211,211)
 YELLOW = (225, 225, 0)
 LIGHT_BLUE = (173, 216, 230)
+RED = (255,0,0)
+GREEN = (0,255,0)
 #set up the screen 
 GRID_COLS = 12  # 
 GRID_ROWS = 8  # 7 rows of tiles
@@ -19,6 +22,11 @@ TITLE_BOX_HEIGHT = 150
 tile_size = 80
 SCREEN_WIDTH = (GRID_COLS * tile_size) + BLANK_BOX_WIDTH
 SCREEN_HEIGHT = TITLE_BOX_HEIGHT + (GRID_ROWS * tile_size) 
+button_width = 200
+button_height = 60
+button_x = GRID_COLS * tile_size + (BLANK_BOX_WIDTH - button_width) // 2
+button_y = 650
+button_y2 = 725
 # create the screen
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 font = pygame.font.Font(None, 30)
@@ -57,15 +65,14 @@ text_lines = [
     "12. Python library used for data analysis and manipulation"
 
 ]
-char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] 
-#answer key
-def answer_key(surface, text_list, x_start, y_start, line_spacing = 25):
+char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the characters typed by the user into the grid 
+# #crossword clues 
+def crossword_clues(surface, text_list, x_start, y_start, line_spacing = 25):
     for ii, line in enumerate(text_list):
         text_surface = font.render(line, False, text_color)
         surface.blit(text_surface, (x_start, TITLE_BOX_HEIGHT + y_start + ii * line_spacing))
-
 #title
-title_text = ["PEM Crossword Puzzle"]
+title_text = ["P.E.M Crossword Puzzle"]
 def title(surface, title_text, x_start, y_start, line_spacing = 25):
     for ii, line in enumerate(title_text):
         text_surface = title_font.render(line, False, text_color)
@@ -79,10 +86,22 @@ matrix_grid =      [[1,1,1,1,1,0,1,1,1,1,1,1],
                    [1,1,1,0,0,0,0,0,0,1,1,1], 
                    [1,1,1,0,1,0,0,0,1,1,1,1], 
                    [1,0,0,0,0,1,0,0,0,0,0,0],
+
                    [1,1,1,1,1,1,0,1,1,1,1,1]]
 
-## creating a grid to handle the characters in the crossword 
- 
+### matrix to store the crossword solutions 
+answer_grid = [
+    ["",  "",  "",  "",  "",  "M", "",  "",  "",  "",  "",  ""],
+    ["P", "R", "O", "G", "R", "A", "M", "",  "",  "",  "",  ""],
+    ["",  "U", "",  "I", "",  "T", "U", "P", "L", "E", "",  ""],
+    ["I", "N", "S", "T", "A", "L", "L", "",  "",  "",  "",  ""],
+    ["",  "",  "",  "H", "I", "A", "T", "U", "S", "",  "",  ""],
+    ["",  "",  "",  "U", "",  "B", "I", "T", "",  "",  "",  ""],
+    ["",  "L", "I", "B", "S", "",  "P", "A", "N", "D", "A", "S"],
+    ["",  "",  "",  "",  "",  "",  "Y", "",  "",  "",  "",  ""],
+]
+
+
 # Draw grid function
 def draw_grid(tile_size):
     ## fill screen 
@@ -97,6 +116,10 @@ def draw_grid(tile_size):
                 color = YELLOW
             elif matrix_grid[row][col] == 3:
                 color = LIGHT_BLUE
+            elif matrix_grid[row][col] == 4:
+                color = RED 
+            elif matrix_grid[row][col] == 5:
+                color = GREEN
             pygame.draw.rect(SCREEN, color, rect)
             pygame.draw.rect(SCREEN, BLACK, rect, 1)
 
@@ -112,8 +135,11 @@ pygame.draw.rect(SCREEN, GREY, title_box)
 ## draw blank box 
 blank_box = pygame.Rect(GRID_COLS * tile_size, 0, BLANK_BOX_WIDTH, SCREEN_HEIGHT)
 pygame.draw.rect(SCREEN, GREY, blank_box)
-
-## drawing parts of the crossword --> try to make this part of the code more efficent 
+## add a button to guess your answers 
+check_button = pygame.Rect(button_x, button_y, button_width, button_height) ## button to check whether the guessed words are correct 
+## add a button to clear the grid 
+clear_button = pygame.Rect(button_x, button_y2, button_width, button_height) ## button to clear the grid
+## clear the grid of colors --> make sure add a reset button to also clear the grid of any color 
 def clear_grid():
     for row in range(GRID_ROWS):
         for col in range(GRID_COLS):
@@ -131,9 +157,13 @@ while run:
             run = False
         if event.type == MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos ## get the mouse position
-            ## converts that position to grid coordinates
+            
+            
+
+    
+            ## converts that position to grid coordinates 
             col = mouse_x // tile_size
-            row = mouse_y // tile_size 
+            row = (mouse_y - TITLE_BOX_HEIGHT) // tile_size
             ## check if mouse position within grid 
             if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS and matrix_grid[row][col] != 1: ## if the mouse position is in the grid and not black
                 if clickCount == 0:      ## first click  
@@ -194,7 +224,7 @@ while run:
                 
         if event.type == pygame.KEYDOWN: ## if the key is pressed      
             if event.key == pygame.K_BACKSPACE:
-                char_grid[row][col] = "" ## cleaar the character in the cell char_grid
+                char_grid[row][col] = "" ## clear the character in the cell char_grid
                 if direction == "horizontal": ## if the direction is horizontal 
                     col-= 1 #go back to the previous column
                 else:  ## direction is vertical 
@@ -239,10 +269,22 @@ while run:
     #displaying hints in the blank box
     SCREEN.fill(WHITE)                          
     draw_grid(tile_size)
-    answer_key(SCREEN, text_lines, x_start=GRID_COLS * tile_size + 20, y_start=20)    
+    crossword_clues(SCREEN, text_lines, x_start=GRID_COLS * tile_size + 20, y_start=20)    
 
-    title(SCREEN, title_text, x_start= 400, y_start=50)    
-      
+    title(SCREEN, title_text, x_start= 400, y_start=50) 
+
+    ##displaying the button to check the answers with the typed words 
+    button_font = pygame.font.Font(None, 48) ## button font 
+    pygame.draw.rect(SCREEN, LIGHT_GREY, check_button, border_radius=3) ## button color
+    button_text = button_font.render("Check", True, BLACK) ## button text 
+    text_center = button_text.get_rect(center=check_button.center) ## center the text on the button 
+    SCREEN.blit(button_text, text_center) ## blit the text on the button (basically put the text on top of the button)
+    
+    ## displaying the button to clear the grid
+    pygame.draw.rect(SCREEN, LIGHT_GREY, clear_button, border_radius=3) ## button color
+    button_text2 = button_font.render("Clear", True, BLACK) ## button text
+    text_center2 = button_text2.get_rect(center=clear_button.center) ## center the text on the button
+    SCREEN.blit(button_text2, text_center2) ## blit the text on the button (basically put the text on top of the button)
 
     pygame.display.update()
     
