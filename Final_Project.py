@@ -14,7 +14,7 @@ LIGHT_GREY = (211,211,211)
 YELLOW = (225, 225, 0)
 LIGHT_BLUE = (173, 216, 230)
 RED = (255,0,0)
-GREEN = (0,255,0)
+GREEN = (0,128,0)
 
 # set up the display 
 GRID_COLS = 12  # 
@@ -32,6 +32,7 @@ button_y2 = 725
 
 # create the screen
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+INTRO_SCREEN = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 font = pygame.font.Font(None, 30)
 active = True ## CHANGE SOON
 text = ''
@@ -113,6 +114,37 @@ answer_grid = [
     ["",  "",  "",  "",  "",  "",  "L", "",  "",  "",  "",  ""],
     ["",  "",  "",  "",  "",  "",  "Y", "",  "",  "",  "",  ""]
 ]
+## Draw introduction screen function 
+show_intro_screen = True
+def draw_instructions():
+    INTRO_SCREEN.fill(WHITE) ## fill the screen with white
+    instructions = [
+        "Instructions",
+        "Guess each word in the crossword.",
+        "Use the CHECK button to check if the words are correct once you are done with the puzzle.",
+        "If the letter in the box is correct, the letter will turn GREEN, and if the letter is incorrect the letter will turn RED.",
+        "Use the CLEAR button to clear the grid.",
+        "Click on a box to start typing a word, and click on the same box again to change the direction of the word.",
+        "Press BACKSPACE to delete a letter.",
+        "Press SPACE to start the game."
+    ]
+    title_font = pygame.font.Font(None, 64)  ### Bigger font for the title
+    title_font.set_bold(True)               ### Make it bold
+    body_font = pygame.font.Font(None, 32)  ### Slightly larger body text
+    body_font.set_bold(False) ## Normal font for the body text
+    
+    ## draw the title 
+    title_surface = title_font.render(instructions[0], True, BLACK) ## create a surface for the title 
+    title_rect = title_surface.get_rect(center=(SCREEN_WIDTH // 2, 80)) ## center the title on the screen
+    INTRO_SCREEN.blit(title_surface, title_rect) ## put the title on the screen
+    
+    # Draw body instructions
+    y = 160   # Push body text lower
+    body_spacing = 40    # Greater spacing between lines
+    for i, line in enumerate(instructions[1:]): ## loop through the instruction list starting from the second line
+        body_surface = body_font.render(line, True, BLACK) ## create surface for the body text 
+        body_rect = body_surface.get_rect(center=(SCREEN_WIDTH // 2, y+i * body_spacing)) ## center the text on the screen
+        INTRO_SCREEN.blit(body_surface, body_rect) ## put the body text on the screen 
 
 # empty array to store puzzle numbers
 numSurfaceArray = []
@@ -242,6 +274,11 @@ while run:
     for event in pygame.event.get():
         if event.type == QUIT:
             run = False
+        if show_intro_screen:
+            if event.type == KEYDOWN and event.key == K_SPACE : ## if the return key is pressed
+                show_intro_screen = False  # Hide instructions
+                continue
+
         if event.type == MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos ## get the mouse position
             ## converts that position to grid coordinates 
@@ -343,14 +380,18 @@ while run:
             if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS and matrix_grid[row][col] != 1:   ## if in grid and not black 
                 first_click = (row,col) ## store the first click index
             else:
-                first_click = None ## if the next cell is out of bounds, set the first click to None 
+                first_click = None ## if the next cell is out of bounds, set the first click to None
+
 
     ## CREATE FUNCTION CALLED DRAW_NUMBERS AND CALL IT HERE
+    
+        
     for i in numbers:
         ## create a surface for each number in the numbers list, render the number on the surface, append the surface to the numSurfaceArray
         numSurfaceArray.append(font.render(str(i), True, BLACK))
 
         ## looks like this: [font.render(numbers[0], True, BLACK), font.render(numbers[1], True, BLACK), font.render(numbers[2], True, BLACK), ...]
+    
 
     for i, j in enumerate(range(len(numbers))):
         SCREEN.blit(numSurfaceArray[i], (coordinateArray[j][0], coordinateArray[j][1]))
@@ -361,6 +402,11 @@ while run:
     draw_numbers()
     draw_timer()
 
+    if show_intro_screen:
+        draw_instructions()
+    else:
+        draw_grid(tile_size)
+        
     pygame.display.update()
     
 pygame.quit()
