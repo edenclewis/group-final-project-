@@ -37,6 +37,7 @@ numbers = [x for x in range(1, 14)] ## list of numbers to be displayed in the bl
 
 #font setup
 font = pygame.font.Font(None, 24)
+timer_font = pygame.font.Font(None, 50)
 text_color = pygame.Color("black")
 correct_color = pygame.Color("green")
 incorrect_color = pygame.Color("red")
@@ -107,8 +108,6 @@ answer_grid = [
     ["",  "",  "",  "",  "",  "",  "L", "",  "",  "",  "",  ""],
     ["",  "",  "",  "",  "",  "",  "Y", "",  "",  "",  "",  ""]
 ]
-
-
 # Draw grid function
 def draw_grid(tile_size):
     ## fill screen 
@@ -152,6 +151,12 @@ clickCount = 0
 first_click = None
 second_click = None
 direction = "horizontal"
+
+
+# Set up the clock
+clock = pygame.time.Clock()
+start_time = 0
+
 # Add event handling to the main loop
 run = True
 while run:
@@ -299,6 +304,14 @@ while run:
     text_center2 = button_text2.get_rect(center=clear_button.center) ## center the text on the button
     SCREEN.blit(button_text2, text_center2) ## blit the text on the button (basically put the text on top of the button)
 
+    ticks = pygame.time.get_ticks()  # Get the current time in milliseconds
+    seconds = (ticks - start_time) / 1000  # Convert to seconds
+    minutes = seconds // 60  # Get the number of minutes
+    output = f"{int(minutes):02}:{int(seconds % 60):02}"  # Format the output as MM:SS
+    timer_text = timer_font.render(output, (150, 40), RED)  # Render the output on the title box
+    SCREEN.blit(timer_text, (150, 40))  # Blit the output on the screen
+    pygame.display.set_caption(f"Time: {output}")  # Update the window title with the elapsed time
+
     ## CREATE FUNCTION CALLED DRAW_NUMBERS AND CALL IT HERE
     for i in numbers:
         ## create a surface for each number in the numbers list, render the number on the surface, append the surface to the numSurfaceArray
@@ -308,7 +321,5 @@ while run:
 
     for i, j in enumerate(range(len(numbers))):
         SCREEN.blit(numSurfaceArray[i], (coordinateArray[j][0], coordinateArray[j][1]))
-
-    pygame.display.update()
-    
+    pygame.display.update() ## update the screen with the new text
 pygame.quit()
