@@ -334,21 +334,23 @@ while run:
     SCREEN.blit(clear_text, clear_center)
 
     ## CREATE FUNCTION CALLED DRAW_NUMBERS AND CALL IT HERE
+    
+        
     for i in numbers:
         ## create a surface for each number in the numbers list, render the number on the surface, append the surface to the numSurfaceArray
         numSurfaceArray.append(font.render(str(i), True, BLACK))
 
         ## looks like this: [font.render(numbers[0], True, BLACK), font.render(numbers[1], True, BLACK), font.render(numbers[2], True, BLACK), ...]
+    
 
     for i, j in enumerate(range(len(numbers))):
         SCREEN.blit(numSurfaceArray[i], (coordinateArray[j][0], coordinateArray[j][1]))
+
     if show_intro_screen:
         draw_instructions()
     else:
         draw_grid(tile_size)
-
-
-    
+        
     pygame.display.update()
     
 pygame.quit()
