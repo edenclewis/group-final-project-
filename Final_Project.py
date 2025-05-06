@@ -14,7 +14,7 @@ LIGHT_GREY = (211,211,211)
 YELLOW = (225, 225, 0)
 LIGHT_BLUE = (173, 216, 230)
 RED = (255,0,0)
-GREEN = (0,255,0)
+GREEN = (0,128,0)
 #set up the screen 
 GRID_COLS = 12  # 
 GRID_ROWS = 9  # 7 rows of tiles
@@ -30,6 +30,7 @@ button_y = 650
 button_y2 = 725
 # create the screen
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+INTRO_SCREEN = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 font = pygame.font.Font(None, 30)
 active = True ## CHANGE SOON
 text = ''
@@ -107,7 +108,35 @@ answer_grid = [
     ["",  "",  "",  "",  "",  "",  "L", "",  "",  "",  "",  ""],
     ["",  "",  "",  "",  "",  "",  "Y", "",  "",  "",  "",  ""]
 ]
-
+## Draw introduction screen function 
+show_intro_screen = True
+def draw_instructions():
+    INTRO_SCREEN.fill(WHITE) ## fill the screen with white
+    instructions = [
+        "Instructions",
+        "Guess each word in the crossword.",
+        "Use the CHECK button to check if the words are correct once you are done with the puzzle.",
+        "If the letter in the box is correct, the letter will turn GREEN, and if the letter is incorrect the letter will turn RED.",
+        "Use the CLEAR button to clear the grid.",
+        "Click on a box to start typing a word, and click on the same box again to change the direction of the word.",
+        "Press BACKSPACE to delete a letter.",
+        "Press SPACE to start the game."
+    ]
+    title_font = pygame.font.Font(None, 64)  ### Bigger font for the title
+    title_font.set_bold(True)               ### Make it bold
+    body_font = pygame.font.Font(None, 32)  ### Slightly larger body text
+    body_font.set_bold(False) ## Normal font for the body text
+    ## draw the title 
+    title_surface = title_font.render(instructions[0], True, BLACK) ## create a surface for the title 
+    title_rect = title_surface.get_rect(center=(SCREEN_WIDTH // 2, 80)) ## center the title on the screen
+    INTRO_SCREEN.blit(title_surface, title_rect) ## put the title on the screen
+    # Draw body instructions
+    y = 160   # Push body text lower
+    body_spacing = 40    # Greater spacing between lines
+    for i, line in enumerate(instructions[1:]): ## loop through the instruction list starting from the second line
+        body_surface = body_font.render(line, True, BLACK) ## create surface for the body text 
+        body_rect = body_surface.get_rect(center=(SCREEN_WIDTH // 2, y+i * body_spacing)) ## center the text on the screen
+        INTRO_SCREEN.blit(body_surface, body_rect) ## put the body text on the screen 
 
 # Draw grid function
 def draw_grid(tile_size):
@@ -158,6 +187,11 @@ while run:
     for event in pygame.event.get():
         if event.type == QUIT:
             run = False
+        if show_intro_screen:
+            if event.type == KEYDOWN and event.key == K_SPACE : ## if the return key is pressed
+                show_intro_screen = False  # Hide instructions
+                continue
+
         if event.type == MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos ## get the mouse position
             ## converts that position to grid coordinates 
@@ -265,19 +299,19 @@ while run:
 
     numSurfaceArray = []
     coordinateArray = [[405,105],    #1
-                       [5,185],     #2
-                       [85,185],    #3
-                       [245,185],   #4
-                       [485,185],   #5
-                       [405,265],  #6
-                       [5,345],    #7
-                       [325,345],  #8
-                       [245,425],  #9
-                       [565,425],  #10
-                       [405,505],  #11
-                       [85,585],   #12
-                       [485,585],  #13
-                       ]   ## x,y coordinates of the numbers in the matrix_grid 
+                    [5,185],     #2
+                    [85,185],    #3
+                    [245,185],   #4
+                    [485,185],   #5
+                    [405,265],  #6
+                    [5,345],    #7
+                    [325,345],  #8
+                    [245,425],  #9
+                    [565,425],  #10
+                    [405,505],  #11
+                    [85,585],   #12
+                    [485,585],  #13
+                    ]   ## x,y coordinates of the numbers in the matrix_grid 
     
     #displaying hints in the blank box
     SCREEN.fill(WHITE)                          
@@ -293,11 +327,11 @@ while run:
     text_center = button_text.get_rect(center=check_button.center) ## center the text on the button 
     SCREEN.blit(button_text, text_center) ## blit the text on the button (basically put the text on top of the button)
     
-    ## displaying the button to clear the grid
-    pygame.draw.rect(SCREEN, LIGHT_GREY, clear_button, border_radius=3) ## button color
-    button_text2 = button_font.render("Clear", True, BLACK) ## button text
-    text_center2 = button_text2.get_rect(center=clear_button.center) ## center the text on the button
-    SCREEN.blit(button_text2, text_center2) ## blit the text on the button (basically put the text on top of the button)
+    # Draw the "Clear" button
+    pygame.draw.rect(SCREEN, LIGHT_GREY, clear_button, border_radius=3)
+    clear_text = button_font.render("Clear", True, BLACK)
+    clear_center = clear_text.get_rect(center=clear_button.center)
+    SCREEN.blit(clear_text, clear_center)
 
     ## CREATE FUNCTION CALLED DRAW_NUMBERS AND CALL IT HERE
     for i in numbers:
@@ -308,7 +342,13 @@ while run:
 
     for i, j in enumerate(range(len(numbers))):
         SCREEN.blit(numSurfaceArray[i], (coordinateArray[j][0], coordinateArray[j][1]))
+    if show_intro_screen:
+        draw_instructions()
+    else:
+        draw_grid(tile_size)
 
+
+    
     pygame.display.update()
     
 pygame.quit()
