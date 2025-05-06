@@ -131,6 +131,37 @@ def draw_grid(tile_size):
                 text_rect = text_surface.get_rect(center=rect.center) ## center the text on the cell
                 SCREEN.blit(text_surface, text_rect) ## put the text on the screen 
 
+def draw_numbers():
+        for i in numbers:
+            ## create a surface for each number in the numbers list, render the number on the surface, append the surface to the numSurfaceArray
+            numSurfaceArray.append(font.render(str(i), True, BLACK))
+
+        for i, j in enumerate(range(len(numbers))):
+            SCREEN.blit(numSurfaceArray[i], (coordinateArray[j][0], coordinateArray[j][1]))
+            
+def draw_hints_title():
+    #displaying hints in the blank box
+    SCREEN.fill(WHITE)                          
+    draw_grid(tile_size)
+    crossword_clues(SCREEN, text_lines, x_start=GRID_COLS * tile_size + 20, y_start=20)    
+
+    title(SCREEN, title_text, x_start= 400, y_start=20) 
+
+
+def draw_buttons():
+    ##displaying the button to check the answers with the typed words 
+    button_font = pygame.font.Font(None, 48) ## button font 
+    pygame.draw.rect(SCREEN, LIGHT_GREY, check_button, border_radius=3) ## button color
+    button_text = button_font.render("Check", True, BLACK) ## button text 
+    text_center = button_text.get_rect(center=check_button.center) ## center the text on the button 
+    SCREEN.blit(button_text, text_center) ## blit the text on the button (basically put the text on top of the button)
+    
+    ## displaying the button to clear the grid
+    pygame.draw.rect(SCREEN, LIGHT_GREY, clear_button, border_radius=3) ## button color
+    button_text2 = button_font.render("Clear", True, BLACK) ## button text
+    text_center2 = button_text2.get_rect(center=clear_button.center) ## center the text on the button
+    SCREEN.blit(button_text2, text_center2) ## blit the text on the button (basically put the text on top of the button)
+
 # draw title box
 title_box = pygame.Rect(0, 0, SCREEN_WIDTH, TITLE_BOX_HEIGHT)
 pygame.draw.rect(SCREEN, GREY, title_box)
@@ -173,13 +204,12 @@ while run:
             ## converts that position to grid coordinates 
             col = mouse_x // tile_size
             row = (mouse_y - TITLE_BOX_HEIGHT) // tile_size
+
             if clear_button.collidepoint(mouse_x,mouse_y):
                 clear_grid()
                 char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the char_grid to empty
                 color_grid = [[text_color for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the color_grid to black
             rect = pygame.Rect(col * tile_size, TITLE_BOX_HEIGHT + row * tile_size, tile_size, tile_size)
-
-            # CREATE FUNCTION CALLED CHECK_PUZZLE AND CALL IT HERE
 
             if check_button.collidepoint(mouse_x, mouse_y): #if the check button has been pressed
                 check_puzzle() ## check the puzzle
@@ -286,36 +316,11 @@ while run:
                        [85,585],   #12
                        [485,585],  #13
                        ]   ## x,y coordinates of the numbers in the matrix_grid 
+
     
-    #displaying hints in the blank box
-    SCREEN.fill(WHITE)                          
-    draw_grid(tile_size)
-    crossword_clues(SCREEN, text_lines, x_start=GRID_COLS * tile_size + 20, y_start=20)    
-
-    title(SCREEN, title_text, x_start= 400, y_start=20) 
-
-    ##displaying the button to check the answers with the typed words 
-    button_font = pygame.font.Font(None, 48) ## button font 
-    pygame.draw.rect(SCREEN, LIGHT_GREY, check_button, border_radius=3) ## button color
-    button_text = button_font.render("Check", True, BLACK) ## button text 
-    text_center = button_text.get_rect(center=check_button.center) ## center the text on the button 
-    SCREEN.blit(button_text, text_center) ## blit the text on the button (basically put the text on top of the button)
-    
-    ## displaying the button to clear the grid
-    pygame.draw.rect(SCREEN, LIGHT_GREY, clear_button, border_radius=3) ## button color
-    button_text2 = button_font.render("Clear", True, BLACK) ## button text
-    text_center2 = button_text2.get_rect(center=clear_button.center) ## center the text on the button
-    SCREEN.blit(button_text2, text_center2) ## blit the text on the button (basically put the text on top of the button)
-
-    ## CREATE FUNCTION CALLED DRAW_NUMBERS AND CALL IT HERE
-    for i in numbers:
-        ## create a surface for each number in the numbers list, render the number on the surface, append the surface to the numSurfaceArray
-        numSurfaceArray.append(font.render(str(i), True, BLACK))
-
-        ## looks like this: [font.render(numbers[0], True, BLACK), font.render(numbers[1], True, BLACK), font.render(numbers[2], True, BLACK), ...]
-
-    for i, j in enumerate(range(len(numbers))):
-        SCREEN.blit(numSurfaceArray[i], (coordinateArray[j][0], coordinateArray[j][1]))
+    draw_hints_title()
+    draw_buttons()
+    draw_numbers()
 
     pygame.display.update()
     
