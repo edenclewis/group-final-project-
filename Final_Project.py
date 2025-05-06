@@ -268,23 +268,26 @@ direction = "horizontal"
 clock = pygame.time.Clock()
 start_time = 0
 
+
+
 # Add event handling to the main loop
 run = True
 while run:
     for event in pygame.event.get():
         if event.type == QUIT:
             run = False
+        
         if show_intro_screen:
             if event.type == KEYDOWN and event.key == K_SPACE : ## if the return key is pressed
                 show_intro_screen = False  # Hide instructions
-                continue
+                continue  
 
         if event.type == MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos ## get the mouse position
             ## converts that position to grid coordinates 
             col = mouse_x // tile_size
             row = (mouse_y - TITLE_BOX_HEIGHT) // tile_size
-
+            
             if clear_button.collidepoint(mouse_x,mouse_y):
                 clear_grid()
                 char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the char_grid to empty
@@ -354,7 +357,7 @@ while run:
                         
                     first_click = second_click ## make the second click the first click 
                     clickCount = 0 # reset the click counter to 0
-                
+
         if event.type == pygame.KEYDOWN: ## if the key is pressed      
             if event.key == pygame.K_BACKSPACE:
                 char_grid[row][col] = "" ## clear the character in the cell char_grid
@@ -362,10 +365,12 @@ while run:
                     col-= 1 # go back to the previous column
                     if col < 0:
                         col = 0
+
                 else:  ## direction is vertical 
                     row-=1 # go back to the previous row 
                     if row < 0:
                         row = 0
+
             else:
                 char_grid[row][col] = event.unicode ## stores the character that was typed
                 if direction == "horizontal": ## if direction is horizontal 
@@ -399,13 +404,14 @@ while run:
         
     draw_hints_title()
     draw_buttons()
-    draw_numbers()
     draw_timer()
 
     if show_intro_screen:
         draw_instructions()
     else:
         draw_grid(tile_size)
+        draw_numbers()
+
         
     pygame.display.update()
     
