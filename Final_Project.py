@@ -148,6 +148,16 @@ def clear_grid():
         for col in range(GRID_COLS):
             if matrix_grid[row][col] == 2 or matrix_grid[row][col] == 3:
                 matrix_grid[row][col] = 0 ## reset the grid to white
+
+def check_puzzle():
+                for row in range(GRID_ROWS):
+                    for col in range(GRID_COLS):
+                        if matrix_grid[row][col] != 1 and char_grid[row][col] != "": 
+                            if char_grid[row][col].upper() == answer_grid[row][col].upper():
+                                color_grid[row][col] = GREEN   
+                            else:
+                                color_grid[row][col] = RED
+
 clickCount = 0
 first_click = None
 second_click = None
@@ -170,18 +180,9 @@ while run:
             rect = pygame.Rect(col * tile_size, TITLE_BOX_HEIGHT + row * tile_size, tile_size, tile_size)
 
             # CREATE FUNCTION CALLED CHECK_PUZZLE AND CALL IT HERE
-            def check_puzzle():
-                for row in range(GRID_ROWS):
-                    for col in range(GRID_COLS):
-                        if matrix_grid[row][col] != 1 and char_grid[row][col] != "": 
-                            if char_grid[row][col].upper() == answer_grid[row][col].upper():
-                                color_grid[row][col] = GREEN   
-                            else:
-                                color_grid[row][col] = RED
 
             if check_button.collidepoint(mouse_x, mouse_y): #if the check button has been pressed
                 check_puzzle() ## check the puzzle
-                    
 
             ## check if mouse position within grid 
             if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS and matrix_grid[row][col] != 1: ## if the mouse position is in the grid and not black
