@@ -63,9 +63,10 @@ text_lines = [
     "a task",
     "6. Ordered sequence of immutable values",
     "9. What you go into after finishing your final exam",
-    "10. Collections of prewritten code (abv)",
+    "7. Download",
     "11. Smallest unit of data represented in 0s or 1s (abv)",
-    "12. Python library used for data analysis and manipulation"
+    "12. Collections of prewritten code (abv)",
+    "13. Python library used for data analysis and manipulation"
 
 ]
 char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the characters typed by the user into the grid 
@@ -95,7 +96,7 @@ matrix_grid =      [[1,1,1,1,1,0,1,1,1,1,1,1],
                    ]
 
 ### matrix to store the crossword solutions 
-answer_grid = answer_grid = [
+answer_grid = [
     ["",  "",  "",  "",  "",  "M", "",  "",  "",  "",  "",  ""],
     ["P", "R", "O", "G", "R", "A", "M", "",  "",  "",  "",  ""],
     ["",  "U", "",  "I", "",  "T", "U", "P", "L", "E", "",  ""],
@@ -238,14 +239,25 @@ while run:
                 char_grid[row][col] = "" ## clear the character in the cell char_grid
                 if direction == "horizontal": ## if the direction is horizontal 
                     col-= 1 #go back to the previous column
+                    if col < 0:
+                        col = 0
+
                 else:  ## direction is vertical 
                     row-=1 # go back to the previous row 
+                    if row < 0:
+                        row = 0
+
             else:
                 char_grid[row][col] = event.unicode ## stores the character that was typed in the cell 
                 if direction == "horizontal": ## if direction is horizontal 
                     col+= 1 # go to the next column
+                    if col >= GRID_COLS:
+                        col = GRID_COLS - 1
                 else:
                     row+=1 # go to the next row 
+                    if row >= GRID_ROWS:
+                        row = GRID_ROWS - 1
+                        
             if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS and matrix_grid[row][col] != 1:   ## if in grid and not black 
                 first_click = (row,col) ## store the first click index
             else:
