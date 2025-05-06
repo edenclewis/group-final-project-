@@ -222,13 +222,13 @@ def draw_buttons():
 
 # Draw timer function
 def draw_timer():
-        ticks = pygame.time.get_ticks()  # Get the current time in milliseconds
-        seconds = (ticks - start_time) / 1000  # Convert to seconds
-        minutes = seconds // 60  # Get the number of minutes
-        output = f"{int(minutes):02}:{int(seconds % 60):02}"  # Format the output as MM:SS
-        timer_text = timer_font.render(output, (150, 40), RED)  # Render the output on the title box
-        SCREEN.blit(timer_text, (150, 40))  # Blit the output on the screen
-        pygame.display.set_caption(f"Time: {output}")  # Update the window title with the elapsed time
+    ticks = pygame.time.get_ticks()  # Get the current time in milliseconds
+    seconds = (ticks - start_time) / 1000  # Convert to seconds
+    minutes = seconds // 60  # Get the number of minutes
+    output = f"{int(minutes):02}:{int(seconds % 60):02}"  # Format the output as MM:SS
+    timer_text = timer_font.render(output, (150, 40), RED)  # Render the output on the title box
+    SCREEN.blit(timer_text, (150, 40))  # Blit the output on the screen
+    pygame.display.set_caption(f"Time: {output}")  # Update the window title with the elapsed time
 
 # draw title box
 title_box = pygame.Rect(0, 0, SCREEN_WIDTH, TITLE_BOX_HEIGHT)
@@ -386,20 +386,6 @@ while run:
                 first_click = (row,col) ## store the first click index
             else:
                 first_click = None ## if the next cell is out of bounds, set the first click to None
-
-
-    ## CREATE FUNCTION CALLED DRAW_NUMBERS AND CALL IT HERE
-    
-        
-    for i in numbers:
-        ## create a surface for each number in the numbers list, render the number on the surface, append the surface to the numSurfaceArray
-        numSurfaceArray.append(font.render(str(i), True, BLACK))
-
-        ## looks like this: [font.render(numbers[0], True, BLACK), font.render(numbers[1], True, BLACK), font.render(numbers[2], True, BLACK), ...]
-    
-
-    for i, j in enumerate(range(len(numbers))):
-        SCREEN.blit(numSurfaceArray[i], (coordinateArray[j][0], coordinateArray[j][1]))
     
         
     draw_hints_title()
