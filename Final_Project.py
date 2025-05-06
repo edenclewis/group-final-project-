@@ -188,6 +188,16 @@ def draw_buttons():
     text_center2 = button_text2.get_rect(center=clear_button.center) ## center the text on the button
     SCREEN.blit(button_text2, text_center2) ## blit the text on the button (basically put the text on top of the button)
 
+# Draw timer function
+def draw_timer():
+        ticks = pygame.time.get_ticks()  # Get the current time in milliseconds
+        seconds = (ticks - start_time) / 1000  # Convert to seconds
+        minutes = seconds // 60  # Get the number of minutes
+        output = f"{int(minutes):02}:{int(seconds % 60):02}"  # Format the output as MM:SS
+        timer_text = timer_font.render(output, (150, 40), RED)  # Render the output on the title box
+        SCREEN.blit(timer_text, (150, 40))  # Blit the output on the screen
+        pygame.display.set_caption(f"Time: {output}")  # Update the window title with the elapsed time
+
 # draw title box
 title_box = pygame.Rect(0, 0, SCREEN_WIDTH, TITLE_BOX_HEIGHT)
 pygame.draw.rect(SCREEN, GREY, title_box)
@@ -333,21 +343,7 @@ while run:
             if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS and matrix_grid[row][col] != 1:   ## if in grid and not black 
                 first_click = (row,col) ## store the first click index
             else:
-                first_click = None ## if the next cell is out of bounds, set the first click to None
-    
-    ## displaying the button to clear the grid
-    pygame.draw.rect(SCREEN, LIGHT_GREY, clear_button, border_radius=3) ## button color
-    button_text2 = button_font.render("Clear", True, BLACK) ## button text
-    text_center2 = button_text2.get_rect(center=clear_button.center) ## center the text on the button
-    SCREEN.blit(button_text2, text_center2) ## blit the text on the button (basically put the text on top of the button)
-
-    ticks = pygame.time.get_ticks()  # Get the current time in milliseconds
-    seconds = (ticks - start_time) / 1000  # Convert to seconds
-    minutes = seconds // 60  # Get the number of minutes
-    output = f"{int(minutes):02}:{int(seconds % 60):02}"  # Format the output as MM:SS
-    timer_text = timer_font.render(output, (150, 40), RED)  # Render the output on the title box
-    SCREEN.blit(timer_text, (150, 40))  # Blit the output on the screen
-    pygame.display.set_caption(f"Time: {output}")  # Update the window title with the elapsed time
+                first_click = None ## if the next cell is out of bounds, set the first click to None 
 
     ## CREATE FUNCTION CALLED DRAW_NUMBERS AND CALL IT HERE
     for i in numbers:
@@ -358,10 +354,12 @@ while run:
 
     for i, j in enumerate(range(len(numbers))):
         SCREEN.blit(numSurfaceArray[i], (coordinateArray[j][0], coordinateArray[j][1]))
+    
         
     draw_hints_title()
     draw_buttons()
     draw_numbers()
+    draw_timer()
 
     pygame.display.update()
     
