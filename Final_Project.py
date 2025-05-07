@@ -279,6 +279,7 @@ while run:
         if show_intro_screen:
             if event.type == KEYDOWN and event.key == K_SPACE : ## if the space key is pressed
                 show_intro_screen = False  # Hide instructions
+                start_time = pygame.time.get_ticks()
                 continue  ## get out of the loop and go to the next iteration 
 
         if event.type == MOUSEBUTTONDOWN:
