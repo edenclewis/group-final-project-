@@ -1,7 +1,5 @@
 # Final Project: Crossword Game
 # Import Modules
-
-
 import pygame
 from pygame.locals import *
 
@@ -242,7 +240,7 @@ pygame.draw.rect(SCREEN, GREY, blank_box)
 check_button = pygame.Rect(button_x, button_y, button_width, button_height) ## button to check whether the guessed words are correct 
 clear_button = pygame.Rect(button_x, button_y2, button_width, button_height) ## button to clear the grid
 
-## clear the grid of colors --> make sure add a reset button to also clear the grid of any color 
+## clear the grid of colors  
 def clear_grid():
     for row in range(GRID_ROWS):
         for col in range(GRID_COLS):
@@ -258,6 +256,7 @@ def check_puzzle():
                     color_grid[row][col] = GREEN   
                 else:
                     color_grid[row][col] = RED
+
 
 clickCount = 0
 first_click = None
@@ -278,9 +277,9 @@ while run:
             run = False
         
         if show_intro_screen:
-            if event.type == KEYDOWN and event.key == K_SPACE : ## if the return key is pressed
+            if event.type == KEYDOWN and event.key == K_SPACE : ## if the space key is pressed
                 show_intro_screen = False  # Hide instructions
-                continue  
+                continue  ## get out of the loop and go to the next iteration 
 
         if event.type == MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos ## get the mouse position
@@ -361,7 +360,7 @@ while run:
         if event.type == pygame.KEYDOWN: ## if the key is pressed      
             if event.key == pygame.K_BACKSPACE:
                 char_grid[row][col] = "" ## clear the character in the cell char_grid
-                if direction == "horizontal": ## if the direction is horizontal 
+                if direction == "horizontal" and matrix_grid[row][col]!=1 : ## if the direction is horizontal and not black
                     col-= 1 # go back to the previous column
                     if col < 0:
                         col = 0
@@ -373,11 +372,11 @@ while run:
 
             else:
                 char_grid[row][col] = event.unicode ## stores the character that was typed
-                if direction == "horizontal": ## if direction is horizontal 
+                if direction == "horizontal" and matrix_grid[row][col] != 1 : ## if direction is horizontal and not black
                     col+= 1 # go to the next column
                     if col >= GRID_COLS:
                         col = GRID_COLS - 1
-                else:
+                elif direction == "vertical" and matrix_grid[row][col] != 1: ## if direction is vertical and not black
                     row+=1 # go to the next row 
                     if row >= GRID_ROWS:
                         row = GRID_ROWS - 1
