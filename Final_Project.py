@@ -15,23 +15,24 @@ RED = (255,0,0)
 GREEN = (0,128,0)
 
 # set up the display 
-GRID_COLS = 12  # 
-GRID_ROWS = 9  # 7 rows of tiles
-BLANK_BOX_WIDTH = 500
-TITLE_BOX_HEIGHT = 100
-tile_size = 80
-SCREEN_WIDTH = (GRID_COLS * tile_size) + BLANK_BOX_WIDTH
-SCREEN_HEIGHT = TITLE_BOX_HEIGHT + (GRID_ROWS * tile_size) 
-button_width = 200
-button_height = 60
-button_x = GRID_COLS * tile_size + (BLANK_BOX_WIDTH - button_width) // 2
-button_y = 650
-button_y2 = 725
+GRID_COLS = 12  # 12 columns of tiles
+GRID_ROWS = 9  # 9 rows of tiles
+BLANK_BOX_WIDTH = 500 ## width of the blank box
+TITLE_BOX_HEIGHT = 100 ## height of the blank box
+tile_size = 80 ## size of each tile in the grid
+SCREEN_WIDTH = (GRID_COLS * tile_size) + BLANK_BOX_WIDTH ## size of entire screen
+SCREEN_HEIGHT = TITLE_BOX_HEIGHT + (GRID_ROWS * tile_size) ## height of entire screen
+button_width = 200 ## width of buttons
+button_height = 60 ## height of buttons
+button_x = GRID_COLS * tile_size + (BLANK_BOX_WIDTH - button_width) // 2 ## x position where buttons on screen (centers buttons)
+button_y = 650 ## y position for check button
+button_y2 = 725 ## y position for clear button
 
 # create the screen
-SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-INTRO_SCREEN = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
-font = pygame.font.Font(None, 30)
+SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)) ## create a screen for the grid
+INTRO_SCREEN = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT)) ## create a screen for the instructions
+
+
 active = True ## CHANGE SOON
 text = ''
 numbers = [x for x in range(1, 14)] ## list of numbers to be displayed in the blank box
@@ -71,7 +72,7 @@ text_lines = [
     "13. Python library used for data analysis and manipulation"
 ]
 
-# Set up the screen
+# lists to hold variables and colors of boxes in the grid
 char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the characters typed by the user into the grid 
 color_grid = [[text_color for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the colors of the characters typed by the user into the grid 
 
@@ -113,7 +114,7 @@ answer_grid = [
     ["",  "",  "",  "",  "",  "",  "Y", "",  "",  "",  "",  ""]
 ]
 ## Draw introduction screen function 
-show_intro_screen = True
+show_intro_screen = True ## variable to show the introduction screen 
 def draw_instructions():
     INTRO_SCREEN.fill(WHITE) ## fill the screen with white
     instructions = [
@@ -138,7 +139,7 @@ def draw_instructions():
     
     # Draw body instructions
     y = 160   # Push body text lower
-    body_spacing = 40    # Greater spacing between lines
+    body_spacing = 40    # Greater spacing between lines for body text 
     for i, line in enumerate(instructions[1:]): ## loop through the instruction list starting from the second line
         body_surface = body_font.render(line, True, BLACK) ## create surface for the body text 
         body_rect = body_surface.get_rect(center=(SCREEN_WIDTH // 2, y+i * body_spacing)) ## center the text on the screen
@@ -168,22 +169,22 @@ def draw_grid(tile_size):
     ## fill screen 
     for row in range(GRID_ROWS):
         for col in range(GRID_COLS):
-            rect = pygame.Rect(col * tile_size, TITLE_BOX_HEIGHT + row * tile_size, tile_size, tile_size)
-            if matrix_grid[row][col] == 0:
+            rect = pygame.Rect(col * tile_size, TITLE_BOX_HEIGHT + row * tile_size, tile_size, tile_size) ## create a rectangle for each tile in the grid
+            if matrix_grid[row][col] == 0: ## if the number of the matrix is 0, fill the tile with white
                 color = WHITE
-            elif matrix_grid[row][col] == 1:
+            elif matrix_grid[row][col] == 1: ## if the number of the matrix is 1, fill the tile with black
                 color = BLACK
-            elif matrix_grid[row][col] == 2:
+            elif matrix_grid[row][col] == 2: ## if the number of the matrix is 2, fill the tile with yellow
                 color = YELLOW
-            elif matrix_grid[row][col] == 3:
+            elif matrix_grid[row][col] == 3: ## if the number of the matrix is 3, fill the tile with light blue
                 color = LIGHT_BLUE
-            pygame.draw.rect(SCREEN, color, rect)
-            pygame.draw.rect(SCREEN, BLACK, rect, 1)
+            pygame.draw.rect(SCREEN, color, rect) ## fill the tile with a color
+            pygame.draw.rect(SCREEN, BLACK, rect, 1) ## draw a black border around the tile 
 
-            if char_grid[row][col] != "":
-                text_surface = font_for_grid.render(char_grid[row][col].upper(), True, color_grid[row][col]) ## create a surface for the text 
-                text_rect = text_surface.get_rect(center=rect.center) ## center the text on the cell
-                SCREEN.blit(text_surface, text_rect) ## put the text on the screen 
+            if char_grid[row][col] != "": ## if the character grid is not empty, draw the character in the tile
+                text_surface = font_for_grid.render(char_grid[row][col].upper(), True, color_grid[row][col]) ## create a surface for the character text 
+                text_rect = text_surface.get_rect(center=rect.center) ## center the characteer on the cell
+                SCREEN.blit(text_surface, text_rect) ## put the character on the screen 
 
 # Draw numbers function
 def draw_numbers():
@@ -233,8 +234,8 @@ title_box = pygame.Rect(0, 0, SCREEN_WIDTH, TITLE_BOX_HEIGHT)
 pygame.draw.rect(SCREEN, GREY, title_box)
 
 ## draw blank box 
-blank_box = pygame.Rect(GRID_COLS * tile_size, 0, BLANK_BOX_WIDTH, SCREEN_HEIGHT)
-pygame.draw.rect(SCREEN, GREY, blank_box)
+blank_box = pygame.Rect(GRID_COLS * tile_size, 0, BLANK_BOX_WIDTH, SCREEN_HEIGHT) ## create a rectangle for the blank box
+pygame.draw.rect(SCREEN, GREY, blank_box) ## fill the blank box with grey color
 
 ## add two buttons: (1) to guess your answers and (2) to clear the grid 
 check_button = pygame.Rect(button_x, button_y, button_width, button_height) ## button to check whether the guessed words are correct 
@@ -242,58 +243,57 @@ clear_button = pygame.Rect(button_x, button_y2, button_width, button_height) ## 
 
 ## clear the grid of colors  
 def clear_grid():
-    for row in range(GRID_ROWS):
+    for row in range(GRID_ROWS): 
         for col in range(GRID_COLS):
-            if matrix_grid[row][col] == 2 or matrix_grid[row][col] == 3:
+            if matrix_grid[row][col] == 2 or matrix_grid[row][col] == 3: ## if the box is yellow or blue 
                 matrix_grid[row][col] = 0 ## reset the grid to white
 
 # checks if guessed letters are correct --> red if wrong, green if right
 def check_puzzle():
     for row in range(GRID_ROWS):
         for col in range(GRID_COLS):
-            if matrix_grid[row][col] != 1 and char_grid[row][col] != "": 
-                if char_grid[row][col].upper() == answer_grid[row][col].upper():
-                    color_grid[row][col] = GREEN   
+            if matrix_grid[row][col] != 1 and char_grid[row][col] != "":  ## if the box is not black and the character grid is not empty 
+                if char_grid[row][col].upper() == answer_grid[row][col].upper(): ## if the character in the grid at row, col is equal to the the character in answer grid at row,col
+                    color_grid[row][col] = GREEN   ## change the color of the character to green
                 else:
-                    color_grid[row][col] = RED
+                    color_grid[row][col] = RED ## change the color of the character to red
 
-
-clickCount = 0
-first_click = None
-second_click = None
-direction = "horizontal"
+## initalizing variables that will be used in the main loop
+clickCount = 0 ## used to count the number of mouse clicks the user has made
+first_click = None ## used to store the first click index
+second_click = None ## used to store the second click index
+direction = "horizontal" ## used to store the direction of the word
+row, col = 0,0 ## used to store the row and column of the clicked box 
 
 # Set up the clock
 clock = pygame.time.Clock()
 start_time = 0
 
 
-
-# Add event handling to the main loop
-run = True
+run = True ## main loop
 while run:
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            run = False
+    for event in pygame.event.get(): ## loop through all the events in the list of events 
+        if event.type == QUIT: ## if the user clicks the close button 
+            run = False ## exit the game
         
-        if show_intro_screen:
+        if show_intro_screen: ## if the intro screen is shown 
             if event.type == KEYDOWN and event.key == K_SPACE : ## if the space key is pressed
                 show_intro_screen = False  # Hide instructions
-                start_time = pygame.time.get_ticks()
+                start_time = pygame.time.get_ticks() ## start the timer
                 continue  ## get out of the loop and go to the next iteration 
 
-        if event.type == MOUSEBUTTONDOWN:
+        if event.type == MOUSEBUTTONDOWN: ## if the mouse button is pressed
             mouse_x, mouse_y = event.pos ## get the mouse position
             ## converts that position to grid coordinates 
-            col = mouse_x // tile_size
-            row = (mouse_y - TITLE_BOX_HEIGHT) // tile_size
+            col = mouse_x // tile_size ## column of the grid
+            row = (mouse_y - TITLE_BOX_HEIGHT) // tile_size ## row of the grid 
             
-            if clear_button.collidepoint(mouse_x,mouse_y):
-                clear_grid()
+            if clear_button.collidepoint(mouse_x,mouse_y): ## if the clear button has been pressed 
+                clear_grid() ## clear the grid of all its colors
                 char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the char_grid to empty
                 color_grid = [[text_color for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the color_grid to black
 
-            rect = pygame.Rect(col * tile_size, TITLE_BOX_HEIGHT + row * tile_size, tile_size, tile_size)
+            rect = pygame.Rect(col * tile_size, TITLE_BOX_HEIGHT + row * tile_size, tile_size, tile_size) ## initaliaze the rectangle for the clicked box
 
             if check_button.collidepoint(mouse_x, mouse_y): #if the check button has been pressed
                 check_puzzle() ## check the puzzle
@@ -301,7 +301,7 @@ while run:
             ## check if mouse position within grid 
             if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS and matrix_grid[row][col] != 1: ## if the mouse position is in the grid and not black
                 if clickCount == 0:      ## first click  
-                    clear_grid()
+                    clear_grid() ## clear the grid of all its colors
                     first_click = (row,col)  ## store the first click index 
                     matrix_grid[row][col] = 2 ## box clicked on turns yellow 
                     direction = "horizontal" ## default direction 
@@ -317,88 +317,93 @@ while run:
                         matrix_grid[row][prev_col] = 3 ## change color of that box to light blue 
                         prev_col -= 1 ## move to the box two away from the one you clicked on 
                     
-                    clickCount = 1 ## set the click count to 1
+                    clickCount = 1 ## set the click count to 1, so the next click will be the second click and the first click is complete 
 
                 elif clickCount == 1:  ## second click 
-                    clear_grid()
+                    clear_grid() ## clear the grid of all its colors
                     second_click = (row,col) ## store the second click index
-                    if second_click == first_click:  ## if the second click is the same as the first click 
+                    if second_click == first_click:  ## if the cordinates of the first and second click are the same
                         direction = "vertical" # change the direction to vertical 
-                        matrix_grid[row][col] = 2
-                        next_row, j = row + 1, col # now check the box below the first click 
+                        matrix_grid[row][col] = 2 ## change the box color to yellow
+                        next_row, j = row + 1, col # now check the box below the second click 
 
-                        while next_row < GRID_ROWS and matrix_grid[next_row][j] != 1: ## if the box below the first click is in the matrix and not black 
+                        while next_row < GRID_ROWS and matrix_grid[next_row][j] != 1: ## if the box below the second click is in the matrix and not black 
                             matrix_grid[next_row][j] = 3 ## change box color to light blue 
-                            next_row += 1 ## move to next box 
+                            next_row += 1 ## move to next row
                         
-                        prev_row, j = row - 1, col # now check the box above the first click
+                        prev_row, j = row - 1, col # now check the box above the second click
 
-                        while prev_row < GRID_ROWS and matrix_grid[prev_row][j] != 1: ## if the box above the first click is in the matrix and not black 
+                        while prev_row < GRID_ROWS and matrix_grid[prev_row][j] != 1: ## if the row above the second click is in the matrix and not black 
                             matrix_grid[prev_row][j] = 3 ## change box color to light blue 
-                            prev_row -= 1 ## move to previous box
+                            prev_row -= 1 ## move to previous row
 
-                    else: ## if the first and second click aren't the same
-                        clear_grid()
+                    else: ## if the first and second click coordinates aren't the same
+                        clear_grid() ## clear the grid of all its color 
                         row,col = second_click  # store index of the second click 
                         matrix_grid[row][col] = 2 ## change box color to yellow 
 
                         next_col = col + 1 ## check the box to the right of the clicked box
                         prev_col = col - 1 ## check to the left of the box
 
-                        while next_col < GRID_COLS and matrix_grid[row][next_col] != 1:
+                        while next_col < GRID_COLS and matrix_grid[row][next_col] != 1: ## if the box to the right of the clicked box is in the matrix and not black
                             matrix_grid[row][next_col] = 3 # change box color to the right of the clicked box to light blue 
-                            next_col += 1
+                            next_col += 1 ## move to the next column
 
-                        while prev_col < GRID_COLS and matrix_grid[row][prev_col] != 1:
+                        while prev_col < GRID_COLS and matrix_grid[row][prev_col] != 1: ## if the box to the left of the clicked box is in the matrix and not black
                             matrix_grid[row][prev_col] = 3 # change box color to the left of the clicked box to light blue 
-                            prev_col -= 1
+                            prev_col -= 1 ## move to the previous column
 
                         direction = "horizontal" ## change direction to default 
                         
-                    first_click = second_click ## make the second click the first click 
+                    first_click = second_click ## coordinates of the first click are now the coordinates of the second click (bascially reseting the first click to the second click so logic works)
                     clickCount = 0 # reset the click counter to 0
 
         if event.type == pygame.KEYDOWN: ## if the key is pressed      
-            if event.key == pygame.K_BACKSPACE:
+            if event.key == pygame.K_BACKSPACE: ## if the backspace key is pressed
                 char_grid[row][col] = "" ## clear the character in the cell char_grid
                 if direction == "horizontal" and matrix_grid[row][col]!=1 : ## if the direction is horizontal and not black
                     col-= 1 # go back to the previous column
-                    if col < 0:
-                        col = 0
+                    ## avoiding going out of bounds 
+                    if col < 0: ## if the column is less than 0
+                        col = 0 ## set the column to 0
+
 
                 else:  ## direction is vertical 
                     row-=1 # go back to the previous row 
-                    if row < 0:
-                        row = 0
+                    ## avoiding going out of bounds
+                    if row < 0: ## if the row is less than 0
+                        row = 0 ## set the row to 0
 
-            else:
+            else: ## if the key pressed is not backspace 
                 char_grid[row][col] = event.unicode ## stores the character that was typed
                 if direction == "horizontal" and matrix_grid[row][col] != 1 : ## if direction is horizontal and not black
                     col+= 1 # go to the next column
-                    if col >= GRID_COLS:
-                        col = GRID_COLS - 1
+                    ## avoiding going out of bounds
+                    if col >= GRID_COLS: ## if the column is greater than the number of columns in the grid 
+                        col = GRID_COLS - 1 ## set the number of the column to the number of the columns in the grid - 1
                 elif direction == "vertical" and matrix_grid[row][col] != 1: ## if direction is vertical and not black
                     row+=1 # go to the next row 
-                    if row >= GRID_ROWS:
-                        row = GRID_ROWS - 1
+                    ## avoiding going out of bounds
+                    if row >= GRID_ROWS: ## if the row is greater than the number of rows in the grid
+                        row = GRID_ROWS - 1 ## set the number of the row to the number of the rows in the grid - 1
                         
-            if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS and matrix_grid[row][col] != 1:   ## if in grid and not black 
+            if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS and matrix_grid[row][col] != 1: ## if in grid and not black 
                 first_click = (row,col) ## store the first click index
             else:
                 first_click = None ## if the next cell is out of bounds, set the first click to None
     
         
-    draw_hints_title()
-    draw_buttons()
-    draw_timer()
+    draw_hints_title() ## draw the hints and the title
+    draw_buttons() ## draw the buttons 
+    draw_timer() ## draw the timer
 
-    if show_intro_screen:
-        draw_instructions()
+    if show_intro_screen: ## if the intro screen is shown
+        draw_instructions() ## draw the instructions
     else:
-        draw_grid(tile_size)
-        draw_numbers()
+        draw_grid(tile_size) ## draw the grid
+        draw_numbers() ## draw the numbers inside the grid
 
         
-    pygame.display.update()
+    pygame.display.update() ## update the display 
     
 pygame.quit()
