@@ -78,12 +78,12 @@ text_lines = [
 
 # lists to hold variables and colors of boxes in the grid
 char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the characters typed by the user into the grid 
-color_grid = [[text_color for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the colors of the characters typed by the user into the grid 
+color_grid = [["black" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the colors of the characters typed by the user into the grid 
 
 # crossword clues 
 def crossword_clues(surface, text_list, x_start, y_start, line_spacing = 25):
     for ii, line in enumerate(text_list):
-        text_surface = font.render(line, False, text_color)
+        text_surface = font.render(line, False, "black")
         surface.blit(text_surface, (x_start, TITLE_BOX_HEIGHT + y_start + ii * line_spacing))
 
 def crossword_clues(surface, text_list, x_start, y_start, line_spacing = 25): #function to display the crossword clues
