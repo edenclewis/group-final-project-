@@ -358,6 +358,7 @@ while run:
         if event.type == pygame.KEYDOWN: ## if the key is pressed      
             if event.key == pygame.K_BACKSPACE:
                 char_grid[row][col] = "" ## clear the character in the cell char_grid
+<<<<<<< Updated upstream
                 if direction == "horizontal" and matrix_grid[row][col]!=1 : ## if the direction is horizontal and not black
                     col-= 1 # go back to the previous column
                     if col < 0:
@@ -378,6 +379,24 @@ while run:
                     row+=1 # go to the next row 
                     if row >= GRID_ROWS:
                         row = GRID_ROWS - 1
+=======
+                if direction == "horizontal":  ## if the direction is horizontal 
+                    if col - 1 >= 0 and matrix_grid[row][col - 1] != 1: ## if the column behind the current column is greater than zero and not black
+                        col-= 1 # go back to the previous column
+                else: ## if the direction is vertical     
+                    if row - 1 >= 0 and matrix_grid[row - 1][col] != 1: ## if the row behind the current row is greater than zero and not black
+                        row -= 1 ## go back to the previous row
+            else: ## if the key pressed is not backspace 
+                if matrix_grid[row][col] != 1: ## if the box is not black
+                     char_grid[row][col] = event.unicode ## stores the character that was typed
+                if direction == "horizontal": ## if the direction is horizontal 
+                    if col + 1 < GRID_COLS and matrix_grid[row][col + 1] != 1: ## if the column next to current column is in the matrix and not black
+                        col+= 1 # go to the next column
+                    ## avoiding going out of bounds
+                elif direction == "vertical": ## if the direction is vertical 
+                    if row + 1 < GRID_ROWS and matrix_grid[row + 1][col] != 1: ## if the row next to current row is in the matrix and not black
+                        row+=1 # go to the next row 
+>>>>>>> Stashed changes
                         
             if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS and matrix_grid[row][col] != 1:   ## if in grid and not black 
                 first_click = (row,col) ## store the first click index
