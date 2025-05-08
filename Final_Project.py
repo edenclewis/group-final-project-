@@ -33,6 +33,8 @@ SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)) ## create a scre
 INTRO_SCREEN = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT)) ## create a screen for the instructions
 
 
+SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+INTRO_SCREEN = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 active = True ## CHANGE SOON
 text = ''
 numbers = [x for x in range(1, 14)] ## list of numbers to be displayed in the blank box
@@ -40,13 +42,15 @@ numbers = [x for x in range(1, 14)] ## list of numbers to be displayed in the bl
 # font setup
 font = pygame.font.Font(None, 24)
 timer_font = pygame.font.Font(None, 50)
-text_color = pygame.Color("black")
-correct_color = pygame.Color("green")
-incorrect_color = pygame.Color("red")
 font_for_grid = pygame.font.Font(None, 50)
 title_font = pygame.font.Font(None, 100)
 
-# crossword clue text
+# Set up the screen
+char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the characters typed by the user into the grid 
+color_grid = [["black" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the colors of the characters typed by the user into the grid 
+
+# CROSSWORD CLUES 
+## crossword clue text
 text_lines = [
     "DOWN",
     "1. Programming language developed by Mathworks",
@@ -81,13 +85,21 @@ def crossword_clues(surface, text_list, x_start, y_start, line_spacing = 25):
     for ii, line in enumerate(text_list):
         text_surface = font.render(line, False, text_color)
         surface.blit(text_surface, (x_start, TITLE_BOX_HEIGHT + y_start + ii * line_spacing))
+
+def crossword_clues(surface, text_list, x_start, y_start, line_spacing = 25): #function to display the crossword clues
+    for ii, line in enumerate(text_list): 
+        text_surface = font.render(line, False, "black") ## create a surface for the text
+        surface.blit(text_surface, (x_start, TITLE_BOX_HEIGHT + y_start + ii * line_spacing)) #blit the crossword text on the screen
+
         
-# title
+# TITLE
+## title text
 title_text = ["P.E.M Crossword Puzzle"]
-def title(surface, title_text, x_start, y_start, line_spacing = 25):
+def title(surface, title_text, x_start, y_start, line_spacing = 25): #function to display the title
+    title_font.set_bold(True) ## make the title bold
     for ii, line in enumerate(title_text):
-        text_surface = title_font.render(line, False, text_color)
-        surface.blit(text_surface, (x_start, y_start + ii * line_spacing))
+        text_surface = title_font.render(line, False, "black") ## create a surface for the title text
+        surface.blit(text_surface, (x_start, y_start + ii * line_spacing)) ## blit the title text on the screen
 
 # creating the matrix with white (0) and black (1) squares
 matrix_grid =      [[1,1,1,1,1,0,1,1,1,1,1,1], 
@@ -127,13 +139,13 @@ def draw_instructions():
         "Press BACKSPACE to delete a letter.",
         "Press SPACE to start the game."
     ]
-    title_font = pygame.font.Font(None, 64)  ### Bigger font for the title
-    title_font.set_bold(True)               ### Make it bold
+    introtitle_font = pygame.font.Font(None, 64)  ### Bigger font for the title
+    introtitle_font.set_bold(True)               ### Make it bold
     body_font = pygame.font.Font(None, 32)  ### Slightly larger body text
     body_font.set_bold(False) ## Normal font for the body text
     
     ## draw the title 
-    title_surface = title_font.render(instructions[0], True, BLACK) ## create a surface for the title 
+    title_surface = introtitle_font.render(instructions[0], True, BLACK) ## create a surface for the title 
     title_rect = title_surface.get_rect(center=(SCREEN_WIDTH // 2, 80)) ## center the title on the screen
     INTRO_SCREEN.blit(title_surface, title_rect) ## put the title on the screen
     
@@ -198,11 +210,11 @@ def draw_numbers():
 # Draw hints and title            
 def draw_hints_title():
     # displaying hints in the blank box
-    SCREEN.fill(WHITE)                          
-    draw_grid(tile_size)
-    crossword_clues(SCREEN, text_lines, x_start=GRID_COLS * tile_size + 20, y_start=20)    
+    SCREEN.fill(WHITE)     # fill the blank box with white                     
+    draw_grid(tile_size) 
+    crossword_clues(SCREEN, text_lines, x_start=GRID_COLS * tile_size + 20, y_start=20)  #call the crossword clues function  
 
-    title(SCREEN, title_text, x_start= 400, y_start=20) 
+    title(SCREEN, title_text, x_start= 400, y_start=20) # call the title function
 
 # Draw buttons function
 def draw_buttons():
@@ -291,7 +303,7 @@ while run:
             if clear_button.collidepoint(mouse_x,mouse_y): ## if the clear button has been pressed 
                 clear_grid() ## clear the grid of all its colors
                 char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the char_grid to empty
-                color_grid = [[text_color for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the color_grid to black
+                color_grid = [["black" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the color_grid to black
 
             rect = pygame.Rect(col * tile_size, TITLE_BOX_HEIGHT + row * tile_size, tile_size, tile_size) ## initaliaze the rectangle for the clicked box
 
@@ -361,37 +373,27 @@ while run:
         if event.type == pygame.KEYDOWN: ## if the key is pressed      
             if event.key == pygame.K_BACKSPACE: ## if the backspace key is pressed
                 char_grid[row][col] = "" ## clear the character in the cell char_grid
-                if direction == "horizontal" and matrix_grid[row][col]!=1 : ## if the direction is horizontal and not black
-                    col-= 1 # go back to the previous column
-                    ## avoiding going out of bounds 
-                    if col < 0: ## if the column is less than 0
-                        col = 0 ## set the column to 0
-
-
-                else:  ## direction is vertical 
-                    row-=1 # go back to the previous row 
-                    ## avoiding going out of bounds
-                    if row < 0: ## if the row is less than 0
-                        row = 0 ## set the row to 0
-
+                if direction == "horizontal":  ## if the direction is horizontal 
+                    if col - 1 >= 0 and matrix_grid[row][col - 1] != 1: ## if the column behind the current column is greater than zero and not black
+                        col-= 1 # go back to the previous column
+                else: ## if the direction is vertical     
+                    if row - 1 >= 0 and matrix_grid[row - 1][col] != 1: ## if the row behind the current row is greater than zero and not black
+                        row -= 1 ## go back to the previous row
             else: ## if the key pressed is not backspace 
-                char_grid[row][col] = event.unicode ## stores the character that was typed
-                if direction == "horizontal" and matrix_grid[row][col] != 1 : ## if direction is horizontal and not black
-                    col+= 1 # go to the next column
+                if matrix_grid[row][col] != 1: ## if the box is not black
+                     char_grid[row][col] = event.unicode ## stores the character that was typed
+                if direction == "horizontal": ## if the direction is horizontal 
+                    if col + 1 < GRID_COLS and matrix_grid[row][col + 1] != 1: ## if the column next to current column is in the matrix and not black
+                        col+= 1 # go to the next column
                     ## avoiding going out of bounds
-                    if col >= GRID_COLS: ## if the column is greater than the number of columns in the grid 
-                        col = GRID_COLS - 1 ## set the number of the column to the number of the columns in the grid - 1
-                elif direction == "vertical" and matrix_grid[row][col] != 1: ## if direction is vertical and not black
-                    row+=1 # go to the next row 
-                    ## avoiding going out of bounds
-                    if row >= GRID_ROWS: ## if the row is greater than the number of rows in the grid
-                        row = GRID_ROWS - 1 ## set the number of the row to the number of the rows in the grid - 1
+                elif direction == "vertical": ## if the direction is vertical 
+                    if row + 1 < GRID_ROWS and matrix_grid[row + 1][col] != 1: ## if the row next to current row is in the matrix and not black
+                        row+=1 # go to the next row 
                         
             if 0 <= row < GRID_ROWS and 0 <= col < GRID_COLS and matrix_grid[row][col] != 1: ## if in grid and not black 
                 first_click = (row,col) ## store the first click index
             else:
-                first_click = None ## if the next cell is out of bounds, set the first click to None
-    
+                first_click = None ## if the next cell is out of bounds, set the first click to None  
         
     draw_hints_title() ## draw the hints and the title
     draw_buttons() ## draw the buttons 
