@@ -31,7 +31,6 @@ button_y2 = 725
 # create the screen
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 INTRO_SCREEN = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
-font = pygame.font.Font(None, 30)
 active = True ## CHANGE SOON
 text = ''
 numbers = [x for x in range(1, 14)] ## list of numbers to be displayed in the blank box
@@ -39,13 +38,15 @@ numbers = [x for x in range(1, 14)] ## list of numbers to be displayed in the bl
 # font setup
 font = pygame.font.Font(None, 24)
 timer_font = pygame.font.Font(None, 50)
-text_color = pygame.Color("black")
-correct_color = pygame.Color("green")
-incorrect_color = pygame.Color("red")
 font_for_grid = pygame.font.Font(None, 50)
 title_font = pygame.font.Font(None, 100)
 
-# crossword clue text
+# Set up the screen
+char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the characters typed by the user into the grid 
+color_grid = [["black" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the colors of the characters typed by the user into the grid 
+
+# CROSSWORD CLUES 
+## crossword clue text
 text_lines = [
     "DOWN",
     "1. Programming language developed by Mathworks",
@@ -70,23 +71,19 @@ text_lines = [
     "12. Collections of prewritten code (abv)",
     "13. Python library used for data analysis and manipulation"
 ]
-
-# Set up the screen
-char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the characters typed by the user into the grid 
-color_grid = [[text_color for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the colors of the characters typed by the user into the grid 
-
-# crossword clues 
-def crossword_clues(surface, text_list, x_start, y_start, line_spacing = 25):
-    for ii, line in enumerate(text_list):
-        text_surface = font.render(line, False, text_color)
-        surface.blit(text_surface, (x_start, TITLE_BOX_HEIGHT + y_start + ii * line_spacing))
+def crossword_clues(surface, text_list, x_start, y_start, line_spacing = 25): #function to display the crossword clues
+    for ii, line in enumerate(text_list): 
+        text_surface = font.render(line, False, "black") ## create a surface for the text
+        surface.blit(text_surface, (x_start, TITLE_BOX_HEIGHT + y_start + ii * line_spacing)) #blit the crossword text on the screen
         
-# title
+# TITLE
+## title text
 title_text = ["P.E.M Crossword Puzzle"]
-def title(surface, title_text, x_start, y_start, line_spacing = 25):
+def title(surface, title_text, x_start, y_start, line_spacing = 25): #function to display the title
+    title_font.set_bold(True) ## make the title bold
     for ii, line in enumerate(title_text):
-        text_surface = title_font.render(line, False, text_color)
-        surface.blit(text_surface, (x_start, y_start + ii * line_spacing))
+        text_surface = title_font.render(line, False, "black") ## create a surface for the title text
+        surface.blit(text_surface, (x_start, y_start + ii * line_spacing)) ## blit the title text on the screen
 
 # creating the matrix with white (0) and black (1) squares
 matrix_grid =      [[1,1,1,1,1,0,1,1,1,1,1,1], 
@@ -126,13 +123,13 @@ def draw_instructions():
         "Press BACKSPACE to delete a letter.",
         "Press SPACE to start the game."
     ]
-    title_font = pygame.font.Font(None, 64)  ### Bigger font for the title
-    title_font.set_bold(True)               ### Make it bold
+    introtitle_font = pygame.font.Font(None, 64)  ### Bigger font for the title
+    introtitle_font.set_bold(True)               ### Make it bold
     body_font = pygame.font.Font(None, 32)  ### Slightly larger body text
     body_font.set_bold(False) ## Normal font for the body text
     
     ## draw the title 
-    title_surface = title_font.render(instructions[0], True, BLACK) ## create a surface for the title 
+    title_surface = introtitle_font.render(instructions[0], True, BLACK) ## create a surface for the title 
     title_rect = title_surface.get_rect(center=(SCREEN_WIDTH // 2, 80)) ## center the title on the screen
     INTRO_SCREEN.blit(title_surface, title_rect) ## put the title on the screen
     
@@ -197,11 +194,11 @@ def draw_numbers():
 # Draw hints and title            
 def draw_hints_title():
     # displaying hints in the blank box
-    SCREEN.fill(WHITE)                          
-    draw_grid(tile_size)
-    crossword_clues(SCREEN, text_lines, x_start=GRID_COLS * tile_size + 20, y_start=20)    
+    SCREEN.fill(WHITE)     # fill the blank box with white                     
+    draw_grid(tile_size) 
+    crossword_clues(SCREEN, text_lines, x_start=GRID_COLS * tile_size + 20, y_start=20)  #call the crossword clues function  
 
-    title(SCREEN, title_text, x_start= 400, y_start=20) 
+    title(SCREEN, title_text, x_start= 400, y_start=20) # call the title function
 
 # Draw buttons function
 def draw_buttons():
@@ -291,7 +288,7 @@ while run:
             if clear_button.collidepoint(mouse_x,mouse_y):
                 clear_grid()
                 char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the char_grid to empty
-                color_grid = [[text_color for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the color_grid to black
+                color_grid = [["black" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## reset the color_grid to black
 
             rect = pygame.Rect(col * tile_size, TITLE_BOX_HEIGHT + row * tile_size, tile_size, tile_size)
 
