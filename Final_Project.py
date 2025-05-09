@@ -364,10 +364,10 @@ while run:
             if event.key == pygame.K_BACKSPACE: ## if the backspace key is pressed
                 char_grid[row][col] = "" ## clear the character in the cell char_grid
                 if direction == "horizontal":  ## if the direction is horizontal 
-                    if col - 1 >= 0 and matrix_grid[row][col - 1] != 1: ## if the column behind the current column is greater than zero and not black
+                    if col - 1 >= 0 and matrix_grid[row][col - 1] != 1: ## if the column behind the current column is in the matrix and not black
                         col-= 1 # go back to the previous column
                 else: ## if the direction is vertical     
-                    if row - 1 >= 0 and matrix_grid[row - 1][col] != 1: ## if the row behind the current row is greater than zero and not black
+                    if row - 1 >= 0 and matrix_grid[row - 1][col] != 1: ## if the row behind the current row is in the matrix and not black
                         row -= 1 ## go back to the previous row
             else: ## if the key pressed is not backspace 
                 if matrix_grid[row][col] != 1: ## if the box is not black
