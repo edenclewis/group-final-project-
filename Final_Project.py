@@ -5,6 +5,7 @@ from pygame.locals import *
 
 # Initialize Pygame
 pygame.init()
+## colors used in the game 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREY = (200,200,200)
@@ -33,17 +34,13 @@ SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)) ## create a scre
 INTRO_SCREEN = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT)) ## create a screen for the instructions
 
 
-SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-INTRO_SCREEN = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
-active = True ## CHANGE SOON
-text = ''
 numbers = [x for x in range(1, 14)] ## list of numbers to be displayed in the blank box
 
 # font setup
-font = pygame.font.Font(None, 24)
-timer_font = pygame.font.Font(None, 50)
-font_for_grid = pygame.font.Font(None, 50)
-title_font = pygame.font.Font(None, 100)
+font = pygame.font.Font(None, 24) ## font for the crossword clues
+timer_font = pygame.font.Font(None, 50) ## font for the timer
+font_for_grid = pygame.font.Font(None, 50) ## font for the grid
+title_font = pygame.font.Font(None, 100) ## font for the title 
 
 # Set up the screen
 char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the characters typed by the user into the grid 
@@ -81,11 +78,6 @@ char_grid = [["" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## create
 color_grid = [["black" for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)] ## creates a 2D empty list to store the colors of the characters typed by the user into the grid 
 
 # crossword clues 
-def crossword_clues(surface, text_list, x_start, y_start, line_spacing = 25):
-    for ii, line in enumerate(text_list):
-        text_surface = font.render(line, False, "black")
-        surface.blit(text_surface, (x_start, TITLE_BOX_HEIGHT + y_start + ii * line_spacing))
-
 def crossword_clues(surface, text_list, x_start, y_start, line_spacing = 25): #function to display the crossword clues
     for ii, line in enumerate(text_list): 
         text_surface = font.render(line, False, "black") ## create a surface for the text
@@ -93,11 +85,10 @@ def crossword_clues(surface, text_list, x_start, y_start, line_spacing = 25): #f
 
         
 # TITLE
-## title text
 title_text = ["P.E.M Crossword Puzzle"]
 def title(surface, title_text, x_start, y_start, line_spacing = 25): #function to display the title
     title_font.set_bold(True) ## make the title bold
-    for ii, line in enumerate(title_text):
+    for ii, line in enumerate(title_text): ## loop through the title text 
         text_surface = title_font.render(line, False, "black") ## create a surface for the title text
         surface.blit(text_surface, (x_start, y_start + ii * line_spacing)) ## blit the title text on the screen
 
@@ -140,7 +131,7 @@ def draw_instructions():
         "Press SPACE to start the game."
     ]
     introtitle_font = pygame.font.Font(None, 64)  ### Bigger font for the title
-    introtitle_font.set_bold(True)               ### Make it bold
+    introtitle_font.set_bold(True)  ### Make it bold
     body_font = pygame.font.Font(None, 32)  ### Slightly larger body text
     body_font.set_bold(False) ## Normal font for the body text
     
@@ -204,9 +195,8 @@ def draw_numbers():
             ## create a surface for each number in the numbers list, render the number on the surface, append the surface to the numSurfaceArray
             numSurfaceArray.append(font.render(str(i), True, BLACK))
 
-        for i, j in enumerate(range(len(numbers))):
-            SCREEN.blit(numSurfaceArray[i], (coordinateArray[j][0], coordinateArray[j][1]))
-
+        for i, j in enumerate(range(len(numbers))): ## loop through the numbers list and the coordinates list
+            SCREEN.blit(numSurfaceArray[i], (coordinateArray[j][0], coordinateArray[j][1])) ## put the number on the screen at the coordinates of that number
 # Draw hints and title            
 def draw_hints_title():
     # displaying hints in the blank box
@@ -242,8 +232,8 @@ def draw_timer():
     pygame.display.set_caption(f"Time: {output}")  # Update the window title with the elapsed time
 
 # draw title box
-title_box = pygame.Rect(0, 0, SCREEN_WIDTH, TITLE_BOX_HEIGHT)
-pygame.draw.rect(SCREEN, GREY, title_box)
+title_box = pygame.Rect(0, 0, SCREEN_WIDTH, TITLE_BOX_HEIGHT) ## create a rectangle for the title box
+pygame.draw.rect(SCREEN, GREY, title_box) ## fill the title box with grey color 
 
 ## draw blank box 
 blank_box = pygame.Rect(GRID_COLS * tile_size, 0, BLANK_BOX_WIDTH, SCREEN_HEIGHT) ## create a rectangle for the blank box
@@ -278,8 +268,8 @@ direction = "horizontal" ## used to store the direction of the word
 row, col = 0,0 ## used to store the row and column of the clicked box 
 
 # Set up the clock
-clock = pygame.time.Clock()
-start_time = 0
+clock = pygame.time.Clock() ## create a clock object 
+start_time = 0 ## used to store the start time of the clock/timer
 
 
 run = True ## main loop
